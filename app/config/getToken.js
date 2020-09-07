@@ -5,6 +5,9 @@ module.exports = {
     ClientId: 'adssadads',
     ClientSecret: 'sadkadsakdsad',
     spikeURL: config.spikeUrl,
-    tokenGrantType: 'haha',
-    tokenAudience: 'yes',
+    tokenGrantType: 'client_credentials',
+    tokenAudience: 'kartoffel',
+    tokenRedisKeyName: 'token',
+    useRedis: true,
+    httpsValidation: false,
 }
