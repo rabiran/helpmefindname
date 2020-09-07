@@ -2,26 +2,34 @@ const isSpecialUser = require('../validators/isSpecialUser');
 const personConverter = require('../helpers/personConverter');
 const personNormalizer = require('../helpers/personNormalizer');
 const { createInTargetOrch } = require('./apis');
-const handleServiceError = require('../errorHandlers/serviceError');
+const { handleServiceError, ServiceError } = require('../errorHandlers/serviceError');
 const { dbUpdateStatus } = require('./status/statusRepo');
 const { log } = require('../helpers/logger');
 
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
 module.exports = async (person) => {
     try {
-        let logInfo = true;
+        console.log('service iteration');
+        const normalizedPerson = personNormalizer(person);
+        const id = normalizedPerson.id;
 
         if (!isSpecialUser(person)) 
-            throw new Error('not good user, needs special domainUser');
+            throw new ServiceError('not good user, needs special domainUser', id);
 
-        const normalizedPerson = personNormalizer(person);
         const ADuser = personConverter(normalizedPerson);
-        createInTargetOrch(ADuser);
 
-        const id = normalizedPerson.id;
+        await sleep(5000);
+        await createInTargetOrch(ADuser);
+
         console.log(ADuser);
 
-        // const result = await dbUpdateStatus(id, {status: { completed: true } });
-        // console.log(result);
+        const result = await dbUpdateStatus(id, {status: { completed: true } });
+        if(!result) 
+            throw new ServiceError('failed updating status', id);
+        
         log('succesfuly sent user for creation.', id);
 
     }

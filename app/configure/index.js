@@ -7,11 +7,8 @@ const startStatus = require('../service/status/startStatus');
 
 module.exports = () => {
     dotenv.config();
-
     
     initLogger();
-    // global.logInfo = log;
-    // global.logError = logError;
 
     startStatus();
     

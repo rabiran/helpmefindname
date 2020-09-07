@@ -5,7 +5,6 @@ const { HttpError } = require ('../../errorHandlers/httpError');
 
 const status = async (req, res) => {
     res.send('service on');
-    // console.log('haha');
 }
 
 const getAllStatus = async (req, res) => {
@@ -17,21 +16,19 @@ const sendPerson = async (req, res) => {
     const { id } = req.body;
 
     const dbstatus = await dbGetStatus(id);
-    if(dbstatus) throw new HttpError(401, 'already exists');
+    if(dbstatus) throw new HttpError(401, 'already exists', id);
 
     const person = await getPersonApi(id);
     const data = { _id: id, status: { completed: false, message: 'sending user creation', step: 0 } };
-    await dbAddStatus(data);
-    const result = await dbUpdateStatus(id, {status: { completed: true } });
-    console.log(result);
-    // sendToService(person);
-    res.send(data);
+    const result = await dbAddStatus(data);
+    sendToService(person);
+    res.send(result);
 }
 
 const updateStatus = async (req, res) => {
     const { message, id } = req.body;
     const data = { status: { completed: false, message, step: 0 } };
-    const result = await dbUpdateStatus(id, body);
+    const result = await dbUpdateStatus(id, data);
     res.send(result);
 }
 

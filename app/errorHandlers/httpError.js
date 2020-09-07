@@ -1,24 +1,23 @@
 const { logError } = require('../helpers/logger');
 
-
 class HttpError extends Error {
-    constructor(code, message) {
-      super();
-      this.code = code || 500;
-      this.message = message || 'Error';
+    constructor(code, message, personId) {
+        super();
+        this.code = code || 500;
+        this.message = message || 'Error';
+        this.personId = personId;
     }
 }
 
-
-const handleError = (err, res) => {
-    const { message, code } = err;
+const handleHttpError = (err, res) => {
+    const { message, code, personId } = err;
     const origin = err.stack.split('\n')[1];
-    // const status = 
     const finalError = message + origin;
-    logError(finalError);
+    logError(finalError, personId);
 
     res.status(code).json({
         message
     });
 }
-module.exports = { HttpError, handleError }
+
+module.exports = { HttpError, handleHttpError }
