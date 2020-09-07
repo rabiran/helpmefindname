@@ -5,7 +5,7 @@ const env = config.env;
 
 module.exports = () => {
     // const connectionUrl = env === 'production' ? prod : env === 'test' ? test : dev;
-    const connectionUrl = config.dbUri;
+    const connectionUrl = config.dbUrl;
     console.log(`Connecting to ${connectionUrl}`);
 
     mongoose.connect(connectionUrl, { useUnifiedTopology: true , useNewUrlParser: true } )
