@@ -15,7 +15,7 @@ const handleHttpError = (err, res) => {
     const finalError = message + origin;
     logError(finalError, personId);
 
-    res.status(code).json({
+    res.status(code || 500).json({
         message
     });
 }

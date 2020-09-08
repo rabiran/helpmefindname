@@ -11,8 +11,8 @@ module.exports = () => {
 
     startStatus();
     
-    if(config.auth)
-        configureSpikeRedis();
+    // if(config.auth)
+    configureSpikeRedis();
     
     if(config.isMock) {
 

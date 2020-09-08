@@ -14,7 +14,6 @@ const getAllStatus = async (req, res) => {
 
 const sendPerson = async (req, res) => {
     const { id } = req.body;
-
     const dbstatus = await dbGetStatus(id);
     if(dbstatus) throw new HttpError(401, 'already exists', id);
 

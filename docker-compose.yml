@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    g:
+        container_name: gservice
+        build: .
+        env_file: docker-compose.env
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mongo
+            - redis
+    
+    mongo:
+        container_name: gmongo
+        image: bitnami/mongodb:latest
+        ports:
+            - "27017:27017"
+        volumes:
+            - ./data:/data/db
+        
+    redis:
+        container_name: gredis
+        image: bitnami/redis:latest
+        environment: 
+            - ALLOW_EMPTY_PASSWORD=yes
+        ports:
+            - "6379:6379"
+        volumes:
+            - ./data:/data/redis
