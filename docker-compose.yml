@@ -4,6 +4,7 @@ services:
     g:
         container_name: gservice
         build: .
+        restart: unless-stopped
         env_file: docker-compose.env
         ports:
             - "8080:8080"
@@ -14,6 +15,15 @@ services:
     mongo:
         container_name: gmongo
         image: bitnami/mongodb:latest
+        restart: unless-stopped
+        environment:
+            # - MONGO_INITDB_ROOT_USERNAME=admin
+            # - MONGO_INITDB_ROOT_PASSWORD=password
+            # - MONGO_INITDB_DATABASE = g
+            - MONGODB_ROOT_PASSWORD=password1
+            - MONGODB_USERNAME=guser
+            - MONGODB_PASSWORD=password2
+            - MONGODB_DATABASE=g
         ports:
             - "27017:27017"
         volumes:
@@ -22,8 +32,10 @@ services:
     redis:
         container_name: gredis
         image: bitnami/redis:latest
+        restart: unless-stopped
         environment: 
-            - ALLOW_EMPTY_PASSWORD=yes
+            # - ALLOW_EMPTY_PASSWORD=yes
+            - REDIS_PASSWORD=password3
         ports:
             - "6379:6379"
         volumes:

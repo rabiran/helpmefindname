@@ -1,4 +1,4 @@
-const { logError } = require('../helpers/logger');
+const { logError } = require('../logger');
 
 class HttpError extends Error {
     constructor(code, message, personId) {

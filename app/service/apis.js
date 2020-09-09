@@ -1,5 +1,5 @@
 const config = require('../config');
-const mockPerson = require('../mocks/person');
+const mockPerson = require('../helpers/mocks/person');
 const axios = require('axios');
 const https = require('https');
 const { getSpikeToken } = require('../configure/spike');

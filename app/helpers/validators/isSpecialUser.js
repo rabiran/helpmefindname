@@ -1,4 +1,4 @@
-const config = require('../config');
+const config = require('../../config');
 
 /**
  * Validates that the user has only special domainUser, returns the user or null

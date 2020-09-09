@@ -1,4 +1,4 @@
-const { logError } = require('../helpers/logger');
+const { logError } = require('../logger');
 
 class ServiceError extends Error {
     constructor(message, personId) {

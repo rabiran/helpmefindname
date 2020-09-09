@@ -1,8 +1,8 @@
-const isSpecialUser = require('../validators/isSpecialUser');
+const isSpecialUser = require('../helpers/validators/isSpecialUser');
 const personConverter = require('../helpers/personConverter');
 const personNormalizer = require('../helpers/personNormalizer');
 const { createInTargetOrch } = require('./apis');
-const { handleServiceError, ServiceError } = require('../errorHandlers/serviceError');
+const { handleServiceError, ServiceError } = require('../helpers/errorHandlers/serviceError');
 const { dbUpdateStatus } = require('./status/statusRepo');
 const { log } = require('../helpers/logger');
 

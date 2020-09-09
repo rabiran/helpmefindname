@@ -1,7 +1,7 @@
 const express = require('express');
 const router = require('./routes');
 const config = require('../../config');
-const { handleHttpError } = require ('../../errorHandlers/httpError');
+const { handleHttpError } = require ('../../helpers/errorHandlers/httpError');
 const port = config.httpPort
 
 const app = express();

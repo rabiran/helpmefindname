@@ -1,7 +1,7 @@
 const sendToService = require('../../service');
 const { dbGetAllStatuses, dbAddStatus, dbUpdateStatus, dbGetStatus  } = require('../../service/status/statusRepo');
 const { getPersonApi } = require('../../service/apis');
-const { HttpError } = require ('../../errorHandlers/httpError');
+const { HttpError } = require ('../../helpers/errorHandlers/httpError');
 
 const status = async (req, res) => {
     res.send('service on');

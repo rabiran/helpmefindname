@@ -13,7 +13,7 @@ module.exports = () => {
     
     // if(config.auth)
     configureSpikeRedis();
-    
+
     if(config.isMock) {
 
         if(config.mocks.isHTTPTrigger)

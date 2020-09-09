@@ -1,6 +1,6 @@
 const sendToService = require('../service');
-const mockDBPerson = require('../mocks/dbPerson');
-const mockPerson = require('../mocks/person');
+const mockDBPerson = require('../helpers/mocks/dbPerson');
+const mockPerson = require('../helpers/mocks/person');
 
 module.exports = () => {
     sendToService(mockDBPerson);
