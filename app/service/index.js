@@ -5,10 +5,7 @@ const { createInTargetOrch } = require('./apis');
 const { handleServiceError, ServiceError } = require('../helpers/errorHandlers/serviceError');
 const { dbUpdateStatus } = require('./status/statusRepo');
 const { log } = require('../helpers/logger');
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
+const sleep = require ('../helpers/utils/sleep');
 
 module.exports = async (person) => {
     try {

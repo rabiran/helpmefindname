@@ -1,5 +1,6 @@
 module.exports = {
     env: process.env.NODE_ENV,
+    dbOptions: { useUnifiedTopology: true , useNewUrlParser: true },
     dbUrl: process.env.DB_URL,
     redisUrl: process.env.REDIS_URL,
     spikeUrl: process.env.SPIKE_URL,

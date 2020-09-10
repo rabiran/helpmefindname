@@ -10,11 +10,4 @@ router.get('/statuses', wa(getAllStatus));
 router.post('/sendPerson', hasId,  wa(sendPerson));
 router.post('/status', wa(updateStatus));
 
-// router.post('/test', async (req, res)=> {
-//     sleep(2000).then(()=>{
-//         console.log('hey');
-//     });
-    
-//     res.send('yes');
-// })
 module.exports = router;

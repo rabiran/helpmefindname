@@ -1,19 +1,17 @@
 const mongoose = require('mongoose');
 const config = require('../../config');
 
-const env = config.env;
-
 module.exports = () => {
-    // const connectionUrl = env === 'production' ? prod : env === 'test' ? test : dev;
     const connectionUrl = config.dbUrl;
-    console.log(`Connecting to ${connectionUrl}`);
+    const dbOptions = config.dbOptions;
+    console.log(`Connecting to db: ${connectionUrl}`);
 
-    mongoose.connect(connectionUrl, { useUnifiedTopology: true , useNewUrlParser: true } )
+    mongoose.connect(connectionUrl, dbOptions )
     .then(() => {
         console.log('Database connection successful');
     })
     .catch(err => {
         console.error(`Database connection error: ${err}`);
     })
-    mongoose.set('useFindAndModify', false);
+    // mongoose.set('useFindAndModify', false);
 }

@@ -1,6 +1,6 @@
-const sendToService = require('../../service');
-const { dbGetAllStatuses, dbAddStatus, dbUpdateStatus, dbGetStatus  } = require('../../service/status/statusRepo');
-const { getPersonApi } = require('../../service/apis');
+const sendToService = require('..');
+const { dbGetAllStatuses, dbAddStatus, dbUpdateStatus, dbGetStatus  } = require('../status/statusRepo');
+const { getPersonApi } = require('../apis');
 const { HttpError } = require ('../../helpers/errorHandlers/httpError');
 
 const status = async (req, res) => {
