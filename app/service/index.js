@@ -7,6 +7,10 @@ const { dbUpdateStatus } = require('./status/statusRepo');
 const { log } = require('../helpers/logger');
 const sleep = require ('../helpers/utils/sleep');
 
+/**
+ * @param person person from kartoffel db or api
+ * prepares everything for orchestration and starts the process.
+ */
 module.exports = async (person) => {
     try {
         console.log('service iteration');

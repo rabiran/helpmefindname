@@ -1,6 +1,6 @@
 const config = require('../config');
 /**
- * @param hierarchy gets hierarchy array
+ * @param hierarchy hierarchy array of strings
  * returns OU string;
  */
 module.exports = (hierarchy) => {

@@ -34,8 +34,10 @@ module.exports = (person) => {
     return {...normalizedPerson, domainUsers};
 }
 
-// const checkPersonType = person => person.domainUsers[0].name ? true : false;
-
+/**
+ * @param person person from kartoffel db or api
+ * returns a person with normalized id, always id and not _id.
+ */
 const normalizeID = person => {
     const isDbPerson = person.domainUsers[0].name ? true : false;
     let id;

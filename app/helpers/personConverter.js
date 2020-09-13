@@ -3,7 +3,7 @@ const config = require('../config');
 const OUbuilder = require('./OUbuilder');
 
 /**
- * @param normalizedPerson a person
+ * @param normalizedPerson  normalized person
  * returns object with fields for active directory
  */
 module.exports = (normalizedPerson) => {
