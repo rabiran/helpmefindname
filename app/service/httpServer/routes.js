@@ -5,9 +5,9 @@ const { hasId } = require('./validator');
 const { status, getAllStatus,
 sendPerson, updateStatus } = require('./controller');
 
-router.get('/', wa(status) );
-router.get('/statuses', wa(getAllStatus));
-router.post('/sendPerson', hasId,  wa(sendPerson));
-router.post('/status', wa(updateStatus));
+router.get('/ruok', wa(status) );
+router.get('/candidate', wa(getAllStatus) );
+router.post('/candidate', hasId, wa(sendPerson));
+router.put('/candidate/', wa(updateStatus));
 
 module.exports = router;
