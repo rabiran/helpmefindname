@@ -3,13 +3,12 @@ const config = require('../config');
 const { initLogger } = require('../helpers/logger');
 const httpServer = require('../service/httpServer/server');
 const directTrigger = require('../triggers/directTrigger');
-const startStatus = require('../service/status/startStatus');
+const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
 
-module.exports = () => {
-
+module.exports = async () => {
     initLogger();
-    startStatus();
+    startDb();
     configureSpikeRedis();
     httpServer();
 

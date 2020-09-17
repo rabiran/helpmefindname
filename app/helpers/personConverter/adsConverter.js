@@ -1,6 +1,6 @@
-const config = require('../config');
+const config = require('../../config');
 // const personNormalizer = require('./personNormalizer');
-const OUbuilder = require('./OUbuilder');
+const OUbuilder = require('../OUbuilder');
 
 /**
  * @param normalizedPerson  normalized person

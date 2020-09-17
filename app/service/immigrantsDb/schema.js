@@ -1,7 +1,7 @@
  
 const mongoose = require('mongoose');
 
-const statusSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
     _id: {
         type: String,
         required: true
@@ -23,7 +23,7 @@ const statusSchema = new mongoose.Schema({
 });
 
 // makes the final object on view prettier with just id field and not _id.
-statusSchema.set('toJSON', {
+schema.set('toJSON', {
     transform: function (doc, ret, options) {
         ret.id = ret._id;
         delete ret._id;
@@ -31,4 +31,4 @@ statusSchema.set('toJSON', {
     }
 }); 
 
-module.exports = mongoose.model(`status`, statusSchema);
+module.exports = mongoose.model(`immigrants`, schema);

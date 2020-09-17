@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const wa = require('../../helpers/utils/wrapAsync');
-const { hasId } = require('./validator');
-const { status, getAllStatus,
-sendPerson, updateStatus } = require('./controller');
+const { isValid } = require('./validator');
+const { status, getImmigrants,
+    addImmigrant, updateImmigrant } = require('./controller');
 
 router.get('/ruok', wa(status) );
-router.get('/candidate', wa(getAllStatus) );
-router.post('/candidate', hasId, wa(sendPerson));
-router.put('/candidate/', wa(updateStatus));
+router.get('/immigrant', wa(getImmigrants) );
+router.post('/immigrant', isValid, wa(addImmigrant));
+router.put('/immigrant', wa(updateImmigrant));
 
 module.exports = router;

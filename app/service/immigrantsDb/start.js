@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const config = require('../../config');
 
-module.exports = () => {
+module.exports = async () => {
     const connectionUrl = config.dbUrl;
     const dbOptions = config.dbOptions;
     console.log(`Connecting to db: ${connectionUrl}`);
 
-    mongoose.connect(connectionUrl, dbOptions )
-    .then(() => {
-        console.log('Database connection successful');
-    })
-    .catch(err => {
+    await mongoose.connect(connectionUrl, dbOptions).catch(err => {
         console.error(`Database connection error: ${err}`);
-    })
+    });
+
+    console.log('Database connection successful');
+
+    
     // mongoose.set('useFindAndModify', false);
 }

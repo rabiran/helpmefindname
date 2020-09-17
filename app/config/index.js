@@ -12,7 +12,7 @@ module.exports = {
     specialMailServer: 'hahaha.com',
     targetDomain: 'damoi.com',
     auth: false,
-    isMock: false,
+    isMock: true,
     mocks: {
         isDirectTrigger: false,
         isHTTPTrigger: true,
