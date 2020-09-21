@@ -5,7 +5,7 @@ const { isValid } = require('./validator');
 const { status, getImmigrants,
     addImmigrant, updateImmigrant } = require('./controller');
 
-router.get('/ruok', wa(status) );
+router.get('/health', wa(status) );
 router.get('/immigrant', wa(getImmigrants) );
 router.post('/immigrant', isValid, wa(addImmigrant));
 router.put('/immigrant', wa(updateImmigrant));

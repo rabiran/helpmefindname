@@ -7,19 +7,22 @@ const schema = new mongoose.Schema({
         required: true
     },
     status: {
-        step: {
-            type: Number,
-            required: true
-        },
-        message: {
+        progress: {
             type: String,
             required: true
         },
-        completed: {
-            type: Boolean,
+        step: {
+            type: String,
             required: true
-        }
-    }
+        },
+        subStep: {
+            type: String,
+            required: false
+        },
+    },
+    // shadowUsers: [{
+
+    // }]
 });
 
 // makes the final object on view prettier with just id field and not _id.

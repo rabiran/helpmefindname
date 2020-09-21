@@ -7,11 +7,12 @@ module.exports = async () => {
     console.log(`Connecting to db: ${connectionUrl}`);
 
     await mongoose.connect(connectionUrl, dbOptions).catch(err => {
-        console.error(`Database connection error: ${err}`);
+        // console.error(`Database connection error: ${err}`);
+        throw new Error(err);
     });
 
     console.log('Database connection successful');
 
     
-    // mongoose.set('useFindAndModify', false);
+    mongoose.set('useFindAndModify', false);
 }

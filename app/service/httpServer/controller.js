@@ -18,7 +18,7 @@ const addImmigrant = async (req, res) => {
     if(dbstatus) throw new HttpError(401, 'already exists', id);
 
     const person = await getPersonApi(id);
-    const data = { _id: id, status: { completed: false, message: 'sending user creation', step: 0 } };
+    const data = { _id: id, status: { progress: 'inprogress', step: 'initiated' } };
     const result = await dbAddImmigrant(data);
     sendToService(person, primaryDomainUser);
     res.send(result);

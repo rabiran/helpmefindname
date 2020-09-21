@@ -10,12 +10,12 @@ const request = axios.create({
     })
 });
 
-request.interceptors.response.use(
-    res => res.data,
-    err => {
-        throw new Error(err.response.data.message);
-    }
-)
+// request.interceptors.response.use(
+//     res => res.data,
+//     err => {
+//         throw new Error(err.response.data.message);
+//     }
+// )
 
 // request.interceptors.request.use(async config => {
 //     config.headers.Authorization = await getSpikeToken();
@@ -23,6 +23,15 @@ request.interceptors.response.use(
 // });
 
 const createInTargetOrch = async (ADuser) => {
+    // const headers = { Authorization: token };
+
+    const headers = { auth: { 
+        username: '', 
+        password: '' 
+    }};
+    const res = await request.get(`${config.targetOrchUrl}/`, { headers });
+    console.log(res);
+    return res;
     return { success: true };
 }
 

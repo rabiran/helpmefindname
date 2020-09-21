@@ -6,13 +6,22 @@ const directTrigger = require('../triggers/directTrigger');
 const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
 
-module.exports = async () => {
-    initLogger();
-    startDb();
-    configureSpikeRedis();
-    httpServer();
 
-    if(config.isMock) {
-        directTrigger();
+module.exports = async () => {
+    try {
+        const port = config.httpPort
+
+        initLogger();
+        await startDb();
+        await configureSpikeRedis();
+        httpServer(port);
+
+        if(config.isMock) {
+            directTrigger();
+        }
+    }
+    catch(err) {
+        console.log('service failed at startup');
+        console.log(err);
     }
 }

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = require('./routes');
-const config = require('../../config');
 const { handleHttpError } = require ('../../helpers/errorHandlers/httpError');
-const port = config.httpPort
 
 const app = express();
 
@@ -14,7 +12,7 @@ app.use((err, req, res , next) => {
     handleHttpError(err, res);
 });
 
-const start = () => {
+const start = (port) => {
     app.listen(port, () => {
         console.log(`http service running at ${port}`)
     })
