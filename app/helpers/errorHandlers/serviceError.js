@@ -1,5 +1,5 @@
 const { logError } = require('../logger');
-
+const { dbUpdateImmigrant } = require('../../service/immigrantsDb/repository');
 class ServiceError extends Error {
     constructor(message, personId) {
         super();
@@ -8,11 +8,14 @@ class ServiceError extends Error {
     }
 }
 
-const handleServiceError = (err) => {
-    const { message, personId } = err;
+const handleServiceError = (err, id) => {
+    // const { message, personId } = err;
+    const { message } = err;
     const origin = err.stack.split('\n')[1];
     const finalError = message + origin;
-    logError(finalError, personId);
+    logError(finalError, id);
+    // logError(finalError, personId);
+    dbUpdateImmigrant(id, { status: { progress: 'failed '} });
 }
 
 module.exports = { ServiceError, handleServiceError }

@@ -12,29 +12,29 @@ const userCreator = require('./userCreator');
  */
 module.exports = async (person, primaryDomain) => {
     try {
-        if(!person.domainUsers) {
-            throw new ServiceError('has no domainUsers', person.id || person._id);
-        }
-
         console.log('service iteration');
         const normalizedPerson = personNormalizer(person);
-        const id = normalizedPerson.id;
-
+        
         // if (!isSfpecialUser(person)) 
         //     throw new ServiceError('not good user, needs special domainUser', id);
 
-
-        const domain = await userCreator(normalizedPerson);
+        const usersCreated = await userCreator(normalizedPerson);
 
         // const result = await dbUpdateImmigrant(id, {status: { completed: true } });
-        const result = await dbUpdateImmigrant(id, { status: { step: `creating ${domain} user` } });
-        if(!result) 
-            throw new ServiceError('failed updating status', id);
+        // await dbUpdateImmigrant(id, { status: { step: `creating ${domain} user` } });
+        // if(!result) 
+        //     throw new ServiceError('failed updating status', id);
         
-        log(`succesfuly sent user for ${domain} user creation.`, id);
+        // log(`succesfuly sent user for ${domain} user creation.`, id);
+
+        if(usersCreated) {
+            // karting api blah blah blah
+            await dbUpdateImmigrant(id, { status: { progress: 'completed' } });
+            log(`everything is done!`, id);
+        }
 
     }
     catch(err) {
-        handleServiceError(err);
+        handleServiceError(err, person.id || person._id);
     }
 }

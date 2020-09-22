@@ -13,7 +13,7 @@ module.exports = async () => {
 
         initLogger();
         await startDb();
-        await configureSpikeRedis();
+        configureSpikeRedis();
         httpServer(port);
 
         if(config.isMock) {

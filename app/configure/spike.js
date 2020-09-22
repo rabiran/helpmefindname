@@ -3,7 +3,7 @@ const options = require('../config/getToken');
 
 let getToken;
 
-const configureSpikeRedis = async () => {
+const configureSpikeRedis = () => {
     getToken = getTokenCreator(options);
 }
 

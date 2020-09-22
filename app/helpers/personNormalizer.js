@@ -8,6 +8,10 @@ module.exports = (person) => {
 
     const normalizedPerson = normalizeID(person);
 
+    if(!normalizedPerson.domainUsers) {
+        throw new Error('has no domainUsers');
+    }
+
     const domainUsers = normalizedPerson.domainUsers.map(dUser => {
         let userName, domainName, adfsUID;
 
