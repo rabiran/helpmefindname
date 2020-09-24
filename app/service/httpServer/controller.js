@@ -39,6 +39,7 @@ const updateImmigrant = async (req, res) => {
         case 'complete': {
             const data = { status: { shadowUser } };
             await dbUpdateImmigrant(id, data);
+            const person = await getPersonApi(id);
             sendToService(person, primaryDomainUser);
             break;
         }

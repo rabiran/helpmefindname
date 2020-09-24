@@ -28,10 +28,10 @@ request.interceptors.response.use(
 const createInTargetOrch = async (ADuser) => {
     // const headers = { Authorization: token };
     const headers = { auth: { 
-        username: 'administrator', 
-        password: 'Aa123456' 
+        username: config.targetOrchUser, 
+        password: config.targetOrchPass 
     }};
-    const res = await request.get(`${config.targetOrchUrl}/`, { headers,  withCredentials: true  }).catch(err => {
+    const res = await request.get(`${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`, { headers,  withCredentials: true  }).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
     });
