@@ -6,7 +6,6 @@ const directTrigger = require('../triggers/directTrigger');
 const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
 
-
 module.exports = async () => {
     try {
         const port = config.httpPort

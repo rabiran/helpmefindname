@@ -19,6 +19,7 @@
     "mongoose": "^5.10.2",
     "spike-get-token": "^1.1.1",
     "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0"
+    "winston-daily-rotate-file": "^4.5.0",
+    "xml2json": "^0.12.0"
   }
 }

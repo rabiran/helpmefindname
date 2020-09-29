@@ -3,6 +3,7 @@ const mockPerson = require('../helpers/mocks/person');
 const axios = require('axios');
 const https = require('https');
 const { getSpikeToken } = require('../configure/spike');
+const xmlGenerator = require('../helpers/orchFormater');
 
 const request = axios.create({
     httpsAgent: new https.Agent({
@@ -26,6 +27,9 @@ request.interceptors.response.use(
 // });
 
 const createInTargetOrch = async (ADuser) => {
+
+    const xml = xmlGenerator(ADuser);
+    console.log(xml);
     // const headers = { Authorization: token };
     const headers = { auth: { 
         username: config.targetOrchUser, 
