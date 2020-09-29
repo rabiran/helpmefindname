@@ -5,6 +5,7 @@ const { handleServiceError, ServiceError } = require('../../helpers/errorHandler
 const { dbUpdateImmigrant } = require('../immigrantsDb/repository');
 const { log } = require('../../helpers/logger');
 const userCreator = require('./userCreator');
+
 /**
  * @param person person from kartoffel db or api
  * @param primaryDomain example: dataSource1

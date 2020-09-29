@@ -2,6 +2,8 @@
 const { createInTargetOrch } = require('../apis');
 const targetConverter = require('../../helpers/personConverter/targetConverter');
 const specialDomains = require('../../config/specialDomains');
+const { dbUpdateImmigrant } = require('../immigrantsDb/repository');
+const { log } = require('../../helpers/logger');
 
 /**
  * @param person person from kartoffel db or api

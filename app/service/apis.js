@@ -4,6 +4,7 @@ const axios = require('axios');
 const https = require('https');
 const { getSpikeToken } = require('../configure/spike');
 const xmlGenerator = require('../helpers/orchFormater');
+const { retry } = require('../helpers/utils/retry');
 
 const request = axios.create({
     httpsAgent: new https.Agent({
@@ -35,10 +36,15 @@ const createInTargetOrch = async (ADuser) => {
         username: config.targetOrchUser, 
         password: config.targetOrchPass 
     }};
-    const res = await request.get(`${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`, { headers,  withCredentials: true  }).catch(err => {
+    const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
+
+    const requestFn = async () => await request.get(url, { headers,  withCredentials: true  });
+
+    const res = await retry(requestFn).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
     });
+
     return res;
     return { success: true };
 }
@@ -47,7 +53,8 @@ const getPersonApi = async (id) => {
     const token = await getSpikeToken();
     console.log(token);
     const headers = { Authorization: token };
-    const person = await request.get(`${config.kartoffelUrl}/api/persons/${id}`, { headers }).catch(err => {
+    const url = `${config.kartoffelUrl}/api/persons/${id}`;
+    const person = await request.get(url, { headers }).catch(err => {
         throw new Error('failed getting person from kartoffel');
     });;
     return person;
