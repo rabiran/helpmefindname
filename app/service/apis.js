@@ -38,9 +38,9 @@ const createInTargetOrch = async (ADuser) => {
     }};
     const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
-    const requestFn = async () => await request.get(url, { headers,  withCredentials: true  });
+    const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
 
-    const res = await retry(requestFn).catch(err => {
+    const res = await retry(orchRequest).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
     });

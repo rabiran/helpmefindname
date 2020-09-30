@@ -15,7 +15,9 @@ const handleServiceError = (err, id) => {
     const finalError = message + origin;
     logError(finalError, id);
     // logError(finalError, personId);
-    dbUpdateImmigrant(id, { status: { progress: 'failed '} });
+    dbUpdateImmigrant(id, { status: { progress: 'failed '} }).catch(err => {
+        logError(`cant contact db! weird shit, ${err}`, id);
+    });
 }
 
 module.exports = { ServiceError, handleServiceError }

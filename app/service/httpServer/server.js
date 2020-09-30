@@ -1,6 +1,7 @@
 const express = require('express');
 const router = require('./routes');
 const { handleHttpError } = require ('../../helpers/errorHandlers/httpError');
+const { log } = require('../../helpers/logger');
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use((err, req, res , next) => {
 
 const start = (port) => {
     app.listen(port, () => {
-        console.log(`http service running at ${port}`)
+        log(`http service running at ${port}`)
     })
 }
 

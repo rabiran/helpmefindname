@@ -1,6 +1,6 @@
 const sleep = require('./sleep');
 
-const retry = async (fn, ms=500, retries=3) => {
+const retry = async (fn, ms=1000, retries=3) => {
     return await fn().catch(async (err) => {
         if(!--retries) throw new Error(err);
         console.log(`failed, ${retries} tries left`);
