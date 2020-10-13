@@ -24,9 +24,17 @@ const schema = new mongoose.Schema({
             required: false
         },
     },
-    // shadowUsers: [{
-
-    // }]
+    shadowUsers: [{
+        domainUser: {
+            type: String,
+            required: true
+        },
+        fields: {
+            type: Object,
+            required: true
+        },
+        required: false
+    }]
 });
 
 // makes the final object on view prettier with just id field and not _id.
@@ -35,6 +43,10 @@ schema.set('toJSON', {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
+        if(ret.shadowUsers)
+            for(user of ret.shadowUsers) {
+                delete user._id;
+            }
     }
 }); 
 

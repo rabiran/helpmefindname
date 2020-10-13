@@ -1,5 +1,5 @@
 const sendToService = require('../immigration');
-const { dbGetImmigrants, dbAddImmigrant, dbUpdateImmigrant, dbGetImmigrant } = require('../immigrantsDb/repository');
+const { dbGetImmigrants, dbAddImmigrant, dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant } = require('../immigrantsDb/repository');
 const { getPersonApi } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 
@@ -18,6 +18,10 @@ const addImmigrant = async (req, res) => {
     if (dbstatus) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
+
+    const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
+    if(!isDomainFound) throw new HttpError(400, 'invalid primaryDomainUser', id);
+
     const data = {
         _id: id,
         status: { progress: 'inprogress', step: 'initiated' },
@@ -29,18 +33,24 @@ const addImmigrant = async (req, res) => {
 }
 
 const updateImmigrant = async (req, res) => {
-    const { message, id, type, shadowUser } = req.body;
+    const { message, type, id, shadowUser } = req.body;
+
+    if(!id) throw new HttpError(400, 'no id');
+    if(!type) throw new HttpError(400, 'no type');
+
     switch (type) {
         case 'message': {
-            const data = { status: { subStep: message } };
+            const data = {'status.subStep': message};
             await dbUpdateImmigrant(id, data);
             break;
         }
         case 'complete': {
-            const data = { status: { shadowUser } };
+            if(!shadowUser) throw new HttpError(400, 'no shadowuser');
+            const data = {'status.subStep': null, 'status.step': 'created user'}
             await dbUpdateImmigrant(id, data);
+            const result = await dbAddShadowUser(id, shadowUser);
             const person = await getPersonApi(id);
-            sendToService(person, primaryDomainUser);
+            sendToService(person, result.primaryDomainUser, result.shadowUsers.toObject());
             break;
         }
     }

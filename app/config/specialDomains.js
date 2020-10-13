@@ -1,5 +1,5 @@
 module.exports = {
-    ads: 'dataSource1',
-    es: 'dataSource2',
-    target: 'dataSource3',
+    ads: 'ads_name',
+    es: 'es_name',
+    target: 'target',
 }

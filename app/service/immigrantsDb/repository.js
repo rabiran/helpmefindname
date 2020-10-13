@@ -17,7 +17,13 @@ const dbAddImmigrant = async (data) => {
 }
 
 const dbUpdateImmigrant = async (_id, data) => {
-    const statuses = await schema.findByIdAndUpdate(_id, data, {new: true, upsert: true}).catch(err => console.log(err));
+    const statuses = await schema.findByIdAndUpdate(_id, data, {new: true});
+    // const statuses = await schema.findByIdAndUpdate(_id, {'status.subStep': 'ajskdads'}, {new: true});
+    return statuses;
+}
+
+const dbAddShadowUser = async (_id, data) => {
+    const statuses = await schema.findByIdAndUpdate(_id, { $push: { shadowUsers: data }}, {new: true});
     return statuses;
 }
 
@@ -26,4 +32,4 @@ const dbDeleteImmigrant = async (_id) => {
     return statuses;
 }
 
-module.exports = { dbGetImmigrants, dbGetImmigrant, dbAddImmigrant, dbUpdateImmigrant, dbDeleteImmigrant }
+module.exports = { dbGetImmigrants, dbGetImmigrant, dbAddImmigrant, dbUpdateImmigrant, dbAddShadowUser, dbDeleteImmigrant }

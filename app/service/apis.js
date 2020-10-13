@@ -56,9 +56,13 @@ const getPersonApi = async (id) => {
     const url = `${config.kartoffelUrl}/api/persons/${id}`;
     const person = await request.get(url, { headers }).catch(err => {
         throw new Error('failed getting person from kartoffel');
-    });;
+    });
     return person;
     // return mockPerson;
 }
 
-module.exports = { createInTargetOrch, getPersonApi }
+const triggerKarting = async (id) => {
+    return true;
+}
+
+module.exports = { createInTargetOrch, getPersonApi, triggerKarting }
