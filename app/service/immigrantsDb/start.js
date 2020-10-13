@@ -3,7 +3,7 @@ const config = require('../../config');
 const { log } = require('../../helpers/logger');
 
 module.exports = async () => {
-    const connectionUrl = config.dbUrl;
+    const connectionUrl = config.env === 'test' ? config.dbUrlTest : config.dbUrl;
     const dbOptions = config.dbOptions;
     log(`Connecting to db: ${connectionUrl}`);
 

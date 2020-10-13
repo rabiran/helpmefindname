@@ -1,4 +1,5 @@
-const { createLogger, format, transports } = require('winston');
+const { createLogger, format, transports, config } = require('winston');
+const appConfig = require('../config');
 const DailyRotateFile = require('winston-daily-rotate-file');
 
 
@@ -39,12 +40,14 @@ const createMyLogger = type => {
         ]
     });
 
-    logger.add(new transports.Console({
-        format: format.combine(
-            format.colorize(),
-            format.simple()
-        )
-    }));
+    if(appConfig.env !== 'test') {
+        logger.add(new transports.Console({
+            format: format.combine(
+                format.colorize(),
+                format.simple()
+            )
+        }));
+    }
 
     return logger;
 }

@@ -17,6 +17,7 @@ const start = (port) => {
     app.listen(port, () => {
         log(`http service running at ${port}`)
     })
+    return app;
 }
 
 module.exports = start;

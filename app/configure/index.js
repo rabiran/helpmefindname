@@ -13,11 +13,18 @@ module.exports = async () => {
         initLogger();
         await startDb();
         configureSpikeRedis();
-        httpServer(port);
+
+        return httpServer(port);
+        
+        // app.listen(port, () => {
+        //     log(`http service running at ${port}`)
+        // })
 
         if(config.isMock) {
             directTrigger();
         }
+
+        // return app;
     }
     catch(err) {
         console.log('service failed at startup');
