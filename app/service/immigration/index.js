@@ -18,17 +18,8 @@ module.exports = async (person, primaryDomain, shadowUsers = []) => {
         console.log('service iteration');
         const normalizedPerson = personNormalizer(person);
         const id = normalizedPerson.id;
-        // if (!isSfpecialUser(person)) 
-        //     throw new ServiceError('not good user, needs special domainUser', id);
 
         const usersCreated = await userCreator(normalizedPerson, primaryDomain, shadowUsers);
-
-        // const result = await dbUpdateImmigrant(id, {status: { completed: true } });
-        // await dbUpdateImmigrant(id, { status: { step: `creating ${domain} user` } });
-        // if(!result) 
-        //     throw new ServiceError('failed updating status', id);
-        
-        // log(`succesfuly sent user for ${domain} user creation.`, id);
 
         if(usersCreated) {
             await triggerKarting(id);

@@ -5,13 +5,12 @@ const { log } = require('../../helpers/logger');
 module.exports = async () => {
     const connectionUrl = config.env === 'test' ? config.dbUrlTest : config.dbUrl;
     const dbOptions = config.dbOptions;
-    log(`Connecting to db: ${connectionUrl}`);
 
     await mongoose.connect(connectionUrl, dbOptions).catch(err => {
-        // console.error(`Database connection error: ${err}`);
+        log(`Database connection error: ${err}`);
         throw new Error(err);
     });
 
-    log('Database connection successful');
+    log(`Database connection successful to ${connectionUrl}`);
     mongoose.set('useFindAndModify', false);
 }

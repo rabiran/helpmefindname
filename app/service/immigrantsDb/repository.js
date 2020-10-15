@@ -18,7 +18,6 @@ const dbAddImmigrant = async (data) => {
 
 const dbUpdateImmigrant = async (_id, data) => {
     const statuses = await schema.findByIdAndUpdate(_id, data, {new: true});
-    // const statuses = await schema.findByIdAndUpdate(_id, {'status.subStep': 'ajskdads'}, {new: true});
     return statuses;
 }
 

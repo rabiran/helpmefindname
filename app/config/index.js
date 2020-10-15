@@ -16,8 +16,4 @@ module.exports = {
     targetDomain: 'damoi.com',
     auth: false,
     isMock: false,
-    mocks: {
-        isDirectTrigger: false,
-        isHTTPTrigger: true,
-    }
 }
