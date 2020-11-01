@@ -55,6 +55,6 @@ module.exports = async (normalizedPerson, primaryDomain, shadowUsers = []) => {
 }
 
 const logAndUpdateDb = async (id, domain) => {
-    await dbUpdateImmigrant(id, {'status.step': `creating ${domain} user`});
+    await dbUpdateImmigrant(id, {'status.step': `${domain}`});
     log(`succesfuly sent user for ${domain} user creation.`, id);
 }
