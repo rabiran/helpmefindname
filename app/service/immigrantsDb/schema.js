@@ -10,6 +10,18 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    gardenerId: {
+        type: String,
+        required: true
+    },
+    hierarchy: {
+        type: String,
+        required: true
+    },
+    identifier: {
+        type: String,
+        required: true
+    },
     status: {
         progress: {
             type: String,

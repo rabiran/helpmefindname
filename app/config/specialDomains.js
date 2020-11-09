@@ -1,5 +1,5 @@
 module.exports = {
-    ads: 'ads_name',
-    es: 'es_name',
+    ads: 'ads',
+    es: 'es',
     target: 'target',
 }

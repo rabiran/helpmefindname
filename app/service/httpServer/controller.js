@@ -1,19 +1,26 @@
 const sendToService = require('../immigration');
-const { dbGetImmigrants, dbAddImmigrant, dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant } = require('../immigrantsDb/repository');
+const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant, 
+dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant, dbDeleteImmigrant } = require('../immigrantsDb/repository');
 const { getPersonApi } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
+const domains = require('../../config/specialDomains');
 
 const status = async (req, res) => {
     res.send('service on');
 }
 
+const getImmigrantsByGardener = async (req, res) => {
+    const migrations = await dbGetImmigrantByGardener(req.params.gardener);
+    res.json(migrations);
+}
+
 const getImmigrants = async (req, res) => {
-    const statuses = await dbGetImmigrants();
-    res.json(statuses);
+    const migrations = await dbGetImmigrants();
+    res.json(migrations);
 }
 
 const addImmigrant = async (req, res) => {
-    const { id, primaryDomainUser } = req.body;
+    const { id, primaryDomainUser, gardenerId } = req.body;
     const dbstatus = await dbGetImmigrant(id);
     if (dbstatus) throw new HttpError(400, 'already exists', id);
 
@@ -25,7 +32,10 @@ const addImmigrant = async (req, res) => {
     const data = {
         _id: id,
         status: { progress: 'inprogress', step: 'initiated' },
-        primaryDomainUser
+        primaryDomainUser,
+        hierarchy: person.hierarchy,
+        gardenerId,
+        identifier: person.identifier
     };
     const result = await dbAddImmigrant(data);
     sendToService(person, primaryDomainUser);
@@ -59,4 +69,18 @@ const updateImmigrant = async (req, res) => {
     res.send(result);
 }
 
-module.exports = { status, getImmigrants, addImmigrant, updateImmigrant }
+const deleteImmigrant = async (req, res) => {
+    const { id } = req.params;
+    const dbstatus = await dbGetImmigrant(id);
+    if(dbstatus.status.progress !== 'completed')
+        throw new HttpError(400, 'status needs to be completed');
+    
+    await dbDeleteImmigrant(id);
+    res.json('ok');
+}
+
+const getDomains = async (req, res) => {
+    res.json(Object.values(domains));
+}
+
+module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, deleteImmigrant, getDomains }

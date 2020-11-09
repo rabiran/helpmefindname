@@ -10,6 +10,11 @@ const dbGetImmigrant = async (_id) => {
     return status;
 }
 
+const dbGetImmigrantByGardener = async (gardener) => {
+    const migrations = await schema.find({gardenerId: gardener});
+    return migrations;
+}
+
 const dbAddImmigrant = async (data) => {
     const status = new schema(data);
     const result = await status.save();
@@ -31,4 +36,5 @@ const dbDeleteImmigrant = async (_id) => {
     return statuses;
 }
 
-module.exports = { dbGetImmigrants, dbGetImmigrant, dbAddImmigrant, dbUpdateImmigrant, dbAddShadowUser, dbDeleteImmigrant }
+module.exports = { dbGetImmigrants, dbGetImmigrant, dbAddImmigrant,
+dbUpdateImmigrant, dbAddShadowUser, dbDeleteImmigrant, dbGetImmigrantByGardener }
