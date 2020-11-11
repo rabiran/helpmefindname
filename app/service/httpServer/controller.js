@@ -29,13 +29,16 @@ const addImmigrant = async (req, res) => {
     const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
     if(!isDomainFound) throw new HttpError(400, 'invalid primaryDomainUser', id);
 
+    console.log(person);
+
     const data = {
         _id: id,
         status: { progress: 'inprogress', step: 'initiated' },
         primaryDomainUser,
-        hierarchy: person.hierarchy,
+        hierarchy: person.hierarchy.join('/'),
         gardenerId,
-        identifier: person.identifier
+        fullName: person.fullName,
+        identifier: person.identifier || '12345'
     };
     const result = await dbAddImmigrant(data);
     sendToService(person, primaryDomainUser);

@@ -8,11 +8,11 @@ addImmigrant, updateImmigrant, getImmigrantsByGardener, deleteImmigrant, getDoma
 
 router.get('/health', wa(status) );
 router.get('/immigrant', isAuth, wa(getImmigrants) );
-router.get('immigrant/:gardener', isAuth, wa(getImmigrantsByGardener))
+router.get('/immigrant/:gardener', isAuth, wa(getImmigrantsByGardener))
 router.post('/immigrant', isAuth, isValid, wa(addImmigrant));
 router.put('/immigrant', isAuth, wa(updateImmigrant));
 router.delete('/immigrant/:id', isAuth, wa(deleteImmigrant));
 
-router.get('domains', wa(getDomains));
+router.get('/domains', wa(getDomains));
 
 module.exports = router;
