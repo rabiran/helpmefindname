@@ -9,17 +9,17 @@ const { triggerKarting } = require('../apis');
 
 /**
  * @param person person from kartoffel db or api
- * @param primaryDomain example: dataSource1
+ * @param primaryDomainUser example: T832423@haha.com
  * @param shadowUsers optional field if there are shadowUsers already
  * prepares everything for orchestration and starts the process.
  */
-module.exports = async (person, primaryDomain, shadowUsers = []) => {
+module.exports = async (person, primaryDomainUser, shadowUsers = []) => {
     try {
         console.log('service iteration');
         const normalizedPerson = personNormalizer(person);
         const id = normalizedPerson.id;
 
-        const usersCreated = await userCreator(normalizedPerson, primaryDomain, shadowUsers);
+        const usersCreated = await userCreator(normalizedPerson, primaryDomainUser, shadowUsers);
 
         if(usersCreated) {
             await triggerKarting(id);

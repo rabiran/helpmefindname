@@ -13,25 +13,28 @@ module.exports = (person) => {
     }
 
     const domainUsers = normalizedPerson.domainUsers.map(dUser => {
-        let userName, domainName, adfsUID;
+        let userName, domainName, adfsUID, uniqueID;
 
         if(dUser.name) {
             userName = dUser.name;
             domainName = dUser.domain;
             adfsUID = 'TBD';
+            uniqueID = `${userName}@${domainName}`;
         }
         else {
             const splitedUser = dUser.uniqueID.split('@');
             userName = splitedUser[0];
             domainName = splitedUser[1];
             adfsUID = dUser.adfsUID;
+            uniqueID = dUser.uniqueID;
         }
 
         return {
             dataSource: dUser.dataSource,
             userName: userName,
             domainName: domainName,
-            adfsUID: adfsUID  
+            adfsUID: adfsUID,
+            uniqueID
         }
     });
 

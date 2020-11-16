@@ -26,10 +26,8 @@ const addImmigrant = async (req, res) => {
 
     const person = await getPersonApi(id);
 
-    const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
-    if(!isDomainFound) throw new HttpError(400, 'invalid primaryDomainUser', id);
-
-    console.log(person);
+    const isDomainFound = person.domainUsers.find(user => user.uniqueID === primaryDomainUser);
+    if(!isDomainFound) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
     const data = {
         _id: id,

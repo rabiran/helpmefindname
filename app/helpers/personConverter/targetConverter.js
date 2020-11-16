@@ -4,13 +4,13 @@ const OUbuilder = require('../OUbuilder');
 
 /**
  * @param normalizedPerson  normalized person
- * @param primaryDomain used for extensionattr1 and 2
+ * @param primaryDomainUser used for extensionattr1 and 2, example: T8249024@haha.com
  * returns object with fields for active directory
  */
-module.exports = (normalizedPerson, primaryDomain) => {
+module.exports = (normalizedPerson, primaryDS, primaryDomainUser) => {
     // const normalizedPerson = personNormalizer(person);
     const specialDomainUser = normalizedPerson.domainUsers.find(user => user.dataSource === config.specialDomain);
-    const primaryDomainUser = normalizedPerson.domainUsers.find(user => user.dataSource === primaryDomain);
+    const primaryUser = normalizedPerson.domainUsers.find(user => user.uniqueID === primaryDomainUser);
 
     return {
         SamAccountName: specialDomainUser.userName,
@@ -18,8 +18,8 @@ module.exports = (normalizedPerson, primaryDomain) => {
         GivenName: normalizedPerson.firstName,
         SurName: normalizedPerson.lastName,
         Mail: `${specialDomainUser.userName}@${config.specialMailServer}`,
-        ExtensionAttribute1: primaryDomainUser.adfsUID,
-        ExtensionAttribute2: `${primaryDomainUser.userName}@${primaryDomainUser.domainName}`,
+        ExtensionAttribute1: primaryUser.adfsUID,
+        ExtensionAttribute2: `${primaryUser.userName}@${primaryUser.domainName}`,
         DistinguishedName: OUbuilder(normalizedPerson.hierarchy),
         UserPrincipalName: `${specialDomainUser.userName}@${config.targetDomain}`
     }

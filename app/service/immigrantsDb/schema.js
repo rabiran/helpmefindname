@@ -41,7 +41,7 @@ const schema = new mongoose.Schema({
         },
     },
     shadowUsers: [{
-        domainUser: {
+        domainDataSource: {
             type: String,
             required: true
         },

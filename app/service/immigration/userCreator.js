@@ -9,14 +9,14 @@ const { log } = require('../../helpers/logger');
 
 /**
  * @param normalizedPerson person
- * @param primaryDomain example: dataSource1
+ * @param primaryDomainUser example: T324234@haha.com
  * @param shadowUsers optional field if there are shadowUsers already
  * starts the correct user creation process and returns true if all created.
  */
-module.exports = async (normalizedPerson, primaryDomain, shadowUsers = []) => {
+module.exports = async (normalizedPerson, primaryDomainUser, shadowUsers = []) => {
 
         const personDomains = normalizedPerson.domainUsers.map(domainUser => domainUser.dataSource);
-        const shadowDomains = shadowUsers.map(user => user.domainUser);
+        const shadowDomains = shadowUsers.map(user => user.domainDataSource);
         const id = normalizedPerson.id;
 
 
@@ -45,11 +45,11 @@ module.exports = async (normalizedPerson, primaryDomain, shadowUsers = []) => {
             return false;
         }
 
+        const targetADuser = targetConverter(normalizedPerson, primaryDomainUser);
+        await createInTargetOrch(targetADuser);
+        console.log(targetADuser);
+        await logAndUpdateDb(id, specialDomains.target);
         console.log('done');
-        // const targetADuser = targetConverter(normalizedPerson);
-        // await createInTargetOrch(targetADuser);
-        // console.log(targetADuser);
-        // await logAndUpdateDb(id, specialDomains.target);
 
         return true; // should be true
 }
