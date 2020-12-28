@@ -84,4 +84,9 @@ const getDomains = async (req, res) => {
     res.json(Object.values(domains));
 }
 
-module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, deleteImmigrant, getDomains }
+const getStats = async (req, res) => {
+    
+}
+
+module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, deleteImmigrant,
+ getDomains, getStats }

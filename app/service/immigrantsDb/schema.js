@@ -6,6 +6,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    viewed: {
+        type: Boolean,
+        default: false
+    },
     primaryDomainUser: {
         type: String,
         required: true
