@@ -5,6 +5,7 @@ const httpServer = require('../service/httpServer/server');
 // const directTrigger = require('../triggers/directTrigger');
 const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
+const { initKafka } = require('../helpers/kafkaProducer');
 
 module.exports = async () => {
     try {
@@ -13,7 +14,7 @@ module.exports = async () => {
         initLogger();
         await startDb();
         configureSpikeRedis();
-
+        await initKafka();
         return httpServer(port);
     }
     catch(err) {
