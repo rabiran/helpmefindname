@@ -1,6 +1,7 @@
 const sendToService = require('../immigration');
 const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant, 
-dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant, dbDeleteImmigrant } = require('../immigrantsDb/repository');
+dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant,
+dbDeleteImmigrant, dbGardenerStats, dbCompletedStats } = require('../immigrantsDb/repository');
 const { getPersonApi } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
@@ -26,7 +27,7 @@ const addImmigrant = async (req, res) => {
 
     const person = await getPersonApi(id);
 
-    const isDomainFound = person.domainUsers.find(user => user.uniqueID === primaryDomainUser);
+    const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
     if(!isDomainFound) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
     const data = {
@@ -85,7 +86,9 @@ const getDomains = async (req, res) => {
 }
 
 const getStats = async (req, res) => {
-    
+    // const stats = await dbGardenerStats();
+    const stats = await dbCompletedStats();
+    res.json(stats);
 }
 
 module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, deleteImmigrant,

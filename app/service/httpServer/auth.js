@@ -8,6 +8,9 @@ const config = require('../../config');
 const averify = util.promisify(jwt.verify);
 
 const isAuth = async (req, res, next) => {
+
+    if(!config.isAuth) return next();
+    
     const token = req.header('Authorization');
     const key = fs.readFileSync(path.join(__dirname, '../../config/key.pem'));
     

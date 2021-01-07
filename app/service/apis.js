@@ -61,8 +61,19 @@ const getPersonApi = async (id) => {
     // return mockPerson;
 }
 
+const getPersonsApi = async (id) => {
+    const token = await getSpikeToken();
+    console.log(token);
+    const headers = { Authorization: token };
+    const url = `${config.kartoffelUrl}/api/persons`;
+    const persons = await request.get(url, { headers }).catch(err => {
+        throw new Error('failed getting person from kartoffel');
+    });
+    return persons;
+    // return mockPerson;
+}
 const triggerKarting = async (id) => {
     return true;
 }
 
-module.exports = { createInTargetOrch, getPersonApi, triggerKarting }
+module.exports = { createInTargetOrch, getPersonApi, triggerKarting, getPersonsApi }

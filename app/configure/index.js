@@ -6,6 +6,7 @@ const httpServer = require('../service/httpServer/server');
 const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
 const { initKafka } = require('../helpers/kafkaProducer');
+const { configureRedisPeople } = require('../service/personsRedis');
 
 module.exports = async () => {
     try {
@@ -14,7 +15,8 @@ module.exports = async () => {
         initLogger();
         await startDb();
         configureSpikeRedis();
-        await initKafka();
+        // await initKafka();
+        await configureRedisPeople(config.redisUrl);
         return httpServer(port);
     }
     catch(err) {
