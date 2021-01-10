@@ -1,7 +1,7 @@
 const sendToService = require('../immigration');
 const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant, 
 dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant,
-dbDeleteImmigrant, dbGardenerStats, dbCompletedStats } = require('../immigrantsDb/repository');
+dbDeleteImmigrant, dbGardenerStats, dbCompletedStats, dbTotalMigrationStats } = require('../immigrantsDb/repository');
 const { getPersonApi } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
@@ -85,11 +85,20 @@ const getDomains = async (req, res) => {
     res.json(Object.values(domains));
 }
 
-const getStats = async (req, res) => {
-    // const stats = await dbGardenerStats();
+const getCompletedStats = async (req, res) => {
     const stats = await dbCompletedStats();
     res.json(stats);
 }
 
+const getGardenerStats = async (req, res) => {
+    const stats = await dbGardenerStats();
+    res.json(stats);
+}
+
+const getTotalStats = async (req, res) => {
+    const stats = await dbTotalMigrationStats();
+    res.json(stats);
+}
+
 module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, deleteImmigrant,
- getDomains, getStats }
+ getDomains, getCompletedStats, getGardenerStats, getTotalStats }
