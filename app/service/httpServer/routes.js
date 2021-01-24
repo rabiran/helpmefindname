@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const wa = require('../../helpers/utils/wrapAsync');
-const { isValid } = require('./validator');
+const { isValidPost, isValidPut } = require('./validator');
 const { isAuth } = require('./auth');
 const { status, getImmigrants,
-addImmigrant, updateImmigrant, getImmigrantsByGardener, deleteImmigrant, getDomains,
+addImmigrant, updateImmigrant, getImmigrantsByGardener, deleteImmigrant, retryStep, getDomains,
 getCompletedStats, getGardenerStats, getTotalStats } = require('./controller');
 
 router.get('/health', wa(status) );
 router.get('/immigrant', isAuth, wa(getImmigrants) );
 router.get('/immigrant/:gardener', isAuth, wa(getImmigrantsByGardener))
-router.post('/immigrant', isAuth, isValid, wa(addImmigrant));
-router.put('/immigrant', isAuth, wa(updateImmigrant));
+router.post('/immigrant', isAuth, isValidPost, wa(addImmigrant));
+router.put('/immigrant/:id', isAuth, isValidPut, wa(updateImmigrant));
+// router.put('/updatePerson/:id', isAuth, wa())
+router.post('/immigrant/retry/:id', isAuth, wa(retryStep));
+
 router.delete('/immigrant/:id', isAuth, wa(deleteImmigrant));
 
 router.get('/stats/completed', wa(getCompletedStats));

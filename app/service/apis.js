@@ -28,7 +28,7 @@ request.interceptors.response.use(
 // });
 
 const createInTargetOrch = async (ADuser) => {
-
+    
     const xml = xmlGenerator(ADuser);
     console.log(xml);
     // const headers = { Authorization: token };
@@ -47,6 +47,48 @@ const createInTargetOrch = async (ADuser) => {
 
     return res;
     return { success: true };
+}
+
+const orchPause = async (data) => {
+    const { id, pause } = data;
+    const xml = xmlGenerator(data);
+    console.log(xml);
+    // const headers = { Authorization: token };
+    const headers = { auth: { 
+        username: config.targetOrchUser, 
+        password: config.targetOrchPass 
+    }};
+    const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
+
+    const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
+
+    const res = await retry(orchRequest).catch(err => {
+        console.log(err);
+        throw new Error('failed sending stuff to orch');
+    });
+
+    return res;
+}
+
+const orchRetry = async (data) => {
+    const { id, step, subStep } = data;
+    const xml = xmlGenerator(data);
+    console.log(xml);
+    // const headers = { Authorization: token };
+    const headers = { auth: { 
+        username: config.targetOrchUser, 
+        password: config.targetOrchPass 
+    }};
+    const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
+
+    const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
+
+    const res = await retry(orchRequest).catch(err => {
+        console.log(err);
+        throw new Error('failed sending stuff to orch');
+    });
+
+    return res;
 }
 
 const getPersonApi = async (id) => {
@@ -76,4 +118,4 @@ const triggerKarting = async (id) => {
     return true;
 }
 
-module.exports = { createInTargetOrch, getPersonApi, triggerKarting, getPersonsApi }
+module.exports = { createInTargetOrch, orchPause, orchRetry, getPersonApi, triggerKarting, getPersonsApi }

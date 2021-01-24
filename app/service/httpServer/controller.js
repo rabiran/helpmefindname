@@ -1,11 +1,12 @@
 const sendToService = require('../immigration');
 const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant, 
 dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant,
-dbDeleteImmigrant, dbGardenerStats, dbCompletedStats, dbTotalMigrationStats } = require('../immigrantsDb/repository');
-const { getPersonApi } = require('../apis');
+dbDeleteImmigrant, dbGardenerStats, dbCompletedStats, dbTotalMigrationStats,
+dbGetImmigrantByPersonId } = require('../immigrantsDb/repository');
+const { getPersonApi, orchRetry, orchPause } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
-
+// const { createInTargetOrch } = require('../apis');
 const status = async (req, res) => {
     res.send('service on');
 }
@@ -21,54 +22,80 @@ const getImmigrants = async (req, res) => {
 }
 
 const addImmigrant = async (req, res) => {
-    const { id, primaryDomainUser, gardenerId } = req.body;
-    const dbstatus = await dbGetImmigrant(id);
-    if (dbstatus) throw new HttpError(400, 'already exists', id);
+    const { id, primaryUniqueIdIndex, isNewUser, gardenerId } = req.body;
+    const migration = await dbGetImmigrantByPersonId(id);
+    if (migration) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
 
-    const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
-    if(!isDomainFound) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
+    // const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
+    const primaryDomainUser = person.domainUsers[primaryUniqueIdIndex];
+    if(!primaryDomainUser) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
-    const data = {
-        _id: id,
-        status: { progress: 'inprogress', step: 'initiated' },
-        primaryDomainUser,
-        hierarchy: person.hierarchy.join('/'),
-        gardenerId,
-        fullName: person.fullName,
-        identifier: person.identifier || '12345'
-    };
-    const result = await dbAddImmigrant(data);
-    sendToService(person, primaryDomainUser);
+    const result = sendToService(person, primaryDomainUser, isNewUser);
     res.send(result);
 }
 
 const updateImmigrant = async (req, res) => {
-    const { message, type, id, shadowUser } = req.body;
-
-    let result = [];
+    const { step, subStep, progress, pause, unpauseable } = req.body;
+    const { id } = req.params;
 
     if(!id) throw new HttpError(400, 'no id');
-    if(!type) throw new HttpError(400, 'no type');
 
-    switch (type) {
-        case 'message': {
-            const data = {'status.subStep': message};
-            result = await dbUpdateImmigrant(id, data);
-            break;
+    const migration = await dbGetImmigrant(id);
+
+    if(pause) {
+        if(migration.unpauseable) {
+            throw new HttpError(400, 'unpauseable!');
         }
-        case 'complete': {
-            if(!shadowUser) throw new HttpError(400, 'no shadowuser');
-            const data = {'status.subStep': null, 'status.step': 'created user'}
-            await dbUpdateImmigrant(id, data);
-            result = await dbAddShadowUser(id, shadowUser);
-            const person = await getPersonApi(id);
-            sendToService(person, result.primaryDomainUser, result.shadowUsers.toObject());
-            break;
-        }
+        const response = await orchPause({id, pause});
+        return res.send(response);
     }
-    res.send(result);
+    else if(unpauseable) {
+        const data = {'unpauseable': unpauseable};
+        const result = await dbUpdateImmigrant(id, data);
+        return res.send(result);
+    }
+    else {
+        const steps = migration.steps;
+
+        const stepIndex = steps.findIndex((obj) => obj.name === step);
+        const subStepIndex = steps[stepIndex].subSteps.findIndex((obj) => obj.name === subStep);
+        
+        const newSteps = {...steps};
+        newSteps[stepIndex].subSteps[subStepIndex].progress = progress;
+
+        const data = {'status.steps': newSteps};
+        const result = await dbUpdateImmigrant(id, data);
+        return res.send(result);
+    }
+
+    // if(!id) throw new HttpError(400, 'no id');
+    // if(!type) throw new HttpError(400, 'no type');
+
+    // switch (type) {
+    //     case 'message': {
+    //         const data = {'status.subStep': message};
+    //         result = await dbUpdateImmigrant(id, data);
+    //         break;
+    //     }
+    //     case 'complete': {
+    //         if(!shadowUser) throw new HttpError(400, 'no shadowuser');
+    //         const data = {'status.subStep': null, 'status.step': 'created user'}
+    //         await dbUpdateImmigrant(id, data);
+    //         result = await dbAddShadowUser(id, shadowUser);
+    //         const person = await getPersonApi(id);
+    //         sendToService(person, result.primaryDomainUser, result.shadowUsers.toObject());
+    //         break;
+    //     }
+    // }
+    // res.send(result);
+}
+
+const retryStep = async (req, res) => {
+    const { step, subStep, id } = req.body;
+    const response = await orchRetry({id, step, subStep});
+    res.json(response);
 }
 
 const deleteImmigrant = async (req, res) => {
@@ -100,5 +127,6 @@ const getTotalStats = async (req, res) => {
     res.json(stats);
 }
 
-module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, deleteImmigrant,
+module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep, 
+deleteImmigrant,
  getDomains, getCompletedStats, getGardenerStats, getTotalStats }

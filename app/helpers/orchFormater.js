@@ -9,11 +9,21 @@ module.exports = (ADuser) => {
 
     const orchJson = {...orchFormat};
     let params = orchJson.entry.content['m:properties']["d:Parameters"].Data.Parameter;
+    console.log(params);
+    params = [];
+    params = Object.keys(ADuser).map((key)=> {
+        return {
+            ID: { $t: key },
+            Value: { $t: ADuser[key]}
+        }
+    });
 
-    for(param of params) {
-        param.Value = { $t: ADuser[param.ID]}
-        param.ID = { $t: param.ID };
-    }
+    console.log(params);
+    orchJson.entry.content['m:properties']["d:Parameters"].Data.Parameter = params;
+    // for(param of params) {
+    //     param.ID = { $t: param.ID };
+    //     param.Value = { $t: ADuser[param.ID]}
+    // }
     const xml = xmler.toXml(orchJson);
     return xml;
 }

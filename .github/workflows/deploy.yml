@@ -1,0 +1,23 @@
+name: auto deploy node app to azure server
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: testing migration server ssh connection
+      uses: appleboy/ssh-action@master
+      with: 
+        host: 52.166.235.72
+        username: migration
+        key: ${{ secrets.MIGRATIONSECRET }}
+        port: 22
+        script: |
+          cd helpmefindname
+          git pull origin master
+          git status
+          npm install
+          npm start

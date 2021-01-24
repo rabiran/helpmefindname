@@ -1,8 +1,14 @@
  
 const mongoose = require('mongoose');
 
+const progressEnum = ['completed', 'inprogress', 'failed'];
+
 const schema = new mongoose.Schema({
     _id: {
+        type: String,
+        required: true
+    },
+    personId: {
         type: String,
         required: true
     },
@@ -16,7 +22,7 @@ const schema = new mongoose.Schema({
     },
     gardenerId: {
         type: String,
-        required: true
+        required: false
     },
     hierarchy: {
         type: String,
@@ -30,19 +36,39 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    unpauseable: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     status: {
         progress: {
             type: String,
             required: true
         },
-        step: {
-            type: String,
-            required: true
-        },
-        subStep: {
-            type: String,
-            required: false
-        },
+        steps: [{
+            name: {
+                type: String,
+                required: true
+            },
+            progress: {
+                type: String,
+                enum: progressEnum,
+                required: true
+            },
+            subSteps: [{
+                name: {
+                    type: String,
+                    required: true
+                },
+                progress: {
+                    type: String,
+                    enum: progressEnum,
+                    required: true
+                },
+                required: false
+            }]
+        }]
     },
     shadowUsers: [{
         domainDataSource: {

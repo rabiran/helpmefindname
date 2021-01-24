@@ -11,7 +11,7 @@ module.exports = {
     targetOrchUrl: process.env.TARGET_ORCH_URL,
     targetOrchUser: process.env.TARGET_ORCH_USER,
     targetOrchPass: process.env.TARGET_ORCH_PASS,
-    kafkaBrokers: JSON.parse(process.env.KAFKA_BROKERS),
+    kafkaBrokers: process.env.KAFKA_BROKERS,
     kafkaTopic: process.env.KAFKA_TOPIC,
     kafkaGroupId: process.env.GROUPID,
     kafkaClientId: process.env.CLIENTID,
