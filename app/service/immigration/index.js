@@ -10,6 +10,7 @@ const { triggerKarting } = require('../apis');
 
 const { createInTargetOrch } = require('../apis');
 const targetConverter = require('../../helpers/personConverter/targetConverter');
+const { HttpError } = require('helpers/errorHandlers/httpError');
 
 /**
  * @param person person from kartoffel db or api
@@ -17,7 +18,7 @@ const targetConverter = require('../../helpers/personConverter/targetConverter')
  * @param shadowUsers optional field if there are shadowUsers already
  * prepares everything for orchestration and starts the process.
  */
-module.exports = async (person, primaryDomainUser, isNewUser = false, shadowUsers = []) => {
+module.exports = async (person, primaryDomainUser, isNewUser = false, gardenerId, shadowUsers = []) => {
     try {
         console.log('service iteration');
         const normalizedPerson = personNormalizer(person);
@@ -36,7 +37,7 @@ module.exports = async (person, primaryDomainUser, isNewUser = false, shadowUser
             status: { progress: 'inprogress', steps: steps },
             primaryDomainUser: primaryDomainUser.dataSource,
             hierarchy: person.hierarchy.join('/'),
-            // gardenerId,
+            gardenerId,
             fullName: person.fullName,
             identifier: person.identifier || '12345'
         };
@@ -52,6 +53,7 @@ module.exports = async (person, primaryDomainUser, isNewUser = false, shadowUser
 
     }
     catch (err) {
-        handleServiceError(err, person.id || person._id);
+        // handleServiceError(err, person.id || person._id);
+        throw new HttpError(500, err.message);
     }
 }

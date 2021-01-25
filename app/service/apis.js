@@ -27,9 +27,9 @@ request.interceptors.response.use(
 //     return config;
 // });
 
-const createInTargetOrch = async (ADuser) => {
-    
-    const xml = xmlGenerator(ADuser);
+const createInTargetOrch = async (data) => {
+    const runBookId = '123';
+    const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
     const headers = { auth: { 
@@ -51,7 +51,8 @@ const createInTargetOrch = async (ADuser) => {
 
 const orchPause = async (data) => {
     const { id, pause } = data;
-    const xml = xmlGenerator(data);
+    const runBookId = '123';
+    const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
     const headers = { auth: { 
@@ -72,7 +73,8 @@ const orchPause = async (data) => {
 
 const orchRetry = async (data) => {
     const { id, step, subStep } = data;
-    const xml = xmlGenerator(data);
+    const runBookId = '123';
+    const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
     const headers = { auth: { 

@@ -32,7 +32,7 @@ const addImmigrant = async (req, res) => {
     const primaryDomainUser = person.domainUsers[primaryUniqueIdIndex];
     if(!primaryDomainUser) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
-    const result = sendToService(person, primaryDomainUser, isNewUser);
+    const result = sendToService(person, primaryDomainUser, isNewUser, gardenerId);
     res.send(result);
 }
 
@@ -46,7 +46,7 @@ const updateImmigrant = async (req, res) => {
 
     if(pause) {
         if(migration.unpauseable) {
-            throw new HttpError(400, 'unpauseable!');
+            throw new HttpError(400, 'unpauseable!', id);
         }
         const response = await orchPause({id, pause});
         return res.send(response);
