@@ -24,7 +24,7 @@ const getImmigrants = async (req, res) => {
 const addImmigrant = async (req, res) => {
     const { id, primaryUniqueIdIndex, isNewUser, gardenerId } = req.body;
     const migration = await dbGetImmigrantByPersonId(id);
-    if (migration) throw new HttpError(400, 'already exists', id);
+    if (migration.length > 0) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
 
@@ -32,7 +32,9 @@ const addImmigrant = async (req, res) => {
     const primaryDomainUser = person.domainUsers[primaryUniqueIdIndex];
     if(!primaryDomainUser) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
-    const result = sendToService(person, primaryDomainUser, isNewUser, gardenerId);
+    const result = await sendToService(person, primaryDomainUser, isNewUser, gardenerId)
+    .catch(err => { throw new HttpError(500, err.message, person.id) });
+
     res.send(result);
 }
 
@@ -101,8 +103,8 @@ const retryStep = async (req, res) => {
 const deleteImmigrant = async (req, res) => {
     const { id } = req.params;
     const dbstatus = await dbGetImmigrant(id);
-    if(dbstatus.status.progress !== 'completed')
-        throw new HttpError(400, 'status needs to be completed');
+    // if(dbstatus.status.progress !== 'completed')
+    //     throw new HttpError(400, 'status needs to be completed');
     
     await dbDeleteImmigrant(id);
     res.json('ok');

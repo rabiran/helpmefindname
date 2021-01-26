@@ -11,7 +11,7 @@ jobs:
     - name: connect and deploy the app
       uses: appleboy/ssh-action@master
       with: 
-        host: 52.166.235.72
+        host: 20.71.138.217
         username: migration
         # key: ${{ secrets.MIGRATIONSECRET }}
         password: ${{ secrets.MIGRATION_PASSWORD }}
@@ -21,4 +21,4 @@ jobs:
           git pull origin master
           git status
           npm install
-          npm start
+          pm2 restart 0

@@ -8,9 +8,13 @@ module.exports = {
     spikeAudience: process.env.AUDIENCE_G,
     kartoffelUrl: process.env.KARTOFFEL_URL,
     kartingUrl: process.env.KARTING_URL,
-    targetOrchUrl: process.env.TARGET_ORCH_URL,
-    targetOrchUser: process.env.TARGET_ORCH_USER,
-    targetOrchPass: process.env.TARGET_ORCH_PASS,
+
+    orchUrl: process.env.ORCH_URL,
+    orchUser: process.env.ORCH_USER,
+    orchPass: process.env.ORCH_PASS,
+    orchDomain: process.env.ORCH_DOMAIN,
+    orchCreateRunbookId: process.env.ORCH_CREATE_RUNBOOKID,
+
     kafkaBrokers: process.env.KAFKA_BROKERS,
     kafkaTopic: process.env.KAFKA_TOPIC,
     kafkaGroupId: process.env.GROUPID,

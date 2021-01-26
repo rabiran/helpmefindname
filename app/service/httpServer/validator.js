@@ -32,6 +32,6 @@ const isValidPut = (req, res, next) => {
 
 
 
-const isProperType = (value, type) => (value && typeof(value) === type)
+const isProperType = (value, type) => (value !== undefined && typeof(value) === type)
 
 module.exports = { isValidPost, isValidPut }

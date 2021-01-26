@@ -1,10 +1,14 @@
 const config = require('../config');
+const util = require('util');
 const mockPerson = require('../helpers/mocks/person');
 const axios = require('axios');
 const https = require('https');
 const { getSpikeToken } = require('../configure/spike');
 const xmlGenerator = require('../helpers/orchFormater');
 const { retry } = require('../helpers/utils/retry');
+const ntlm = require('httpntlm');
+
+const antlm = util.promisify(ntlm.post);
 
 const request = axios.create({
     httpsAgent: new https.Agent({
@@ -27,26 +31,96 @@ request.interceptors.response.use(
 //     return config;
 // });
 
+// ntlm.post(options, async (err, res) => {
+//     if(err) throw new Error('failed sending stuff to orch');
+
+//     console.log(res.body);
+//     // const haha = await client.get(url).catch(err => {
+//     //     console.log(err.response.data);
+//     // });
+//     // console.log(haha);
+// })
+
 const createInTargetOrch = async (data) => {
-    const runBookId = '123';
+    const runBookId = config.orchCreateRunbookId;
     const xml = xmlGenerator(data, runBookId);
-    console.log(xml);
-    // const headers = { Authorization: token };
-    const headers = { auth: { 
-        username: config.targetOrchUser, 
-        password: config.targetOrchPass 
-    }};
-    const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
+    // // const headers = { Authorization: token };
+    // const headers = { auth: { 
+    //     username: config.targetOrchUser, 
+    //     password: config.targetOrchPass 
+    // }};
+    // const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
-    const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
 
-    const res = await retry(orchRequest).catch(err => {
+    const url = config.orchUrl;
+    const domain = config.orchDomain;
+    const user = config.orchUser
+    const pass = config.orchPass
+
+    const options = {
+        url: url,
+        username: user,
+        password: pass,
+        workstation: '',
+        domain: domain,
+        body: xml,
+        headers: {'Content-Type': 'application/atom+xml'}
+    };
+
+    const response = await antlm(options).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
-    });
+    })
 
-    return res;
-    return { success: true };
+    console.log(xml);
+    console.log(response.body);
+    if(response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if(response.statusCode === 400) throw new Error('Validation failed for orch');
+
+
+    return response.body;
+    
+    return {
+        "id": "1",
+        "steps": [
+            {
+                "name": "making pizza",
+                "subSteps": [
+                    {
+                        "name": "preparing"
+                    },
+                    {
+                        "name": "baking"
+                    }
+                ]
+            },
+            {
+                "name": "delivering pizza",
+                "subSteps": [
+                    {
+                        "name": "finding adress"
+                    },
+                    {
+                        "name": "delivering"
+                    },
+                    {
+                        "name": "accepting payment"
+                    }
+                ]
+            }
+         ]     
+    }
+
+    
+    // const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
+
+    // const res = await retry(orchRequest).catch(err => {
+    //     console.log(err);
+    //     throw new Error('failed sending stuff to orch');
+    // });
+
+    // return res;
+    // return { success: true };
 }
 
 const orchPause = async (data) => {
