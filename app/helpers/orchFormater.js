@@ -49,6 +49,8 @@ module.exports = (data, runBookId) => {
         gibrish+='/Value';
         gibrish+=closeTag;
 
+        console.log("============");
+        console.log(data[key]);
         // gibrish.+=(param);
     });
 

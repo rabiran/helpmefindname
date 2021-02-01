@@ -5,10 +5,12 @@ const axios = require('axios');
 const https = require('https');
 const { getSpikeToken } = require('../configure/spike');
 const xmlGenerator = require('../helpers/orchFormater');
+const orchParamParser = require('../helpers/orchParamParser');
 const { retry } = require('../helpers/utils/retry');
 const ntlm = require('httpntlm');
 
-const antlm = util.promisify(ntlm.post);
+const antlmPost = util.promisify(ntlm.post);
+const antlmGet = util.promisify(ntlm.get);
 
 const request = axios.create({
     httpsAgent: new https.Agent({
@@ -26,6 +28,11 @@ request.interceptors.response.use(
     // }
 )
 
+const url = config.orchUrl;
+const domain = config.orchDomain;
+const user = config.orchUser
+const pass = config.orchPass
+
 // request.interceptors.request.use(async config => {
 //     config.headers.Authorization = await getSpikeToken();
 //     return config;
@@ -41,9 +48,38 @@ request.interceptors.response.use(
 //     // console.log(haha);
 // })
 
+const getOrchParams = async (runBookId) => {
+    const options = {
+        url: `${url}/Runbooks(guid'${runBookId}')/Parameters`,
+        username: user,
+        password: pass,
+        workstation: '',
+        domain: domain,
+        headers: {'Content-Type': 'application/atom+xml'}
+    };
+
+    const response = await antlmGet(options).catch(err => {
+        console.log(err);
+        throw new Error('failed getting orch params');
+    });
+    if(response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if(response.statusCode === 400) throw new Error('Validation failed for orch');
+
+    const xmlParams = response.body;
+    const params = orchParamParser(xmlParams);
+    return params;
+}
+
 const createInTargetOrch = async (data) => {
     const runBookId = config.orchCreateRunbookId;
-    const xml = xmlGenerator(data, runBookId);
+    const params = await getOrchParams(runBookId);
+    const mergedDataWithParams =  {};
+    Object.keys(params).forEach(param => {
+        mergedDataWithParams[params[param]] = data[params[param]];
+    });
+
+    console.log(mergedDataWithParams);
+    const xml = xmlGenerator(mergedDataWithParams, runBookId);
     // // const headers = { Authorization: token };
     // const headers = { auth: { 
     //     username: config.targetOrchUser, 
@@ -52,13 +88,8 @@ const createInTargetOrch = async (data) => {
     // const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
 
-    const url = config.orchUrl;
-    const domain = config.orchDomain;
-    const user = config.orchUser
-    const pass = config.orchPass
-
     const options = {
-        url: url,
+        url: `${url}/Jobs/`,
         username: user,
         password: pass,
         workstation: '',
@@ -67,7 +98,7 @@ const createInTargetOrch = async (data) => {
         headers: {'Content-Type': 'application/atom+xml'}
     };
 
-    const response = await antlm(options).catch(err => {
+    const response = await antlmPost(options).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
     })

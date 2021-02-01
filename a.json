@@ -1,0 +1,336 @@
+{
+  "feed": {
+    "xml:base": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/",
+    "xmlns:d": "http://schemas.microsoft.com/ado/2007/08/dataservices",
+    "xmlns:m": "http://schemas.microsoft.com/ado/2007/08/dataservices/metadata",
+    "xmlns": "http://www.w3.org/2005/Atom",
+    "title": { "type": "text", "$t": "Parameters" },
+    "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/Runbooks(guid'0d4d7fce-e099-4966-9efa-b4277f7e82ec')/Parameters",
+    "updated": "2021-02-01T10:54:47Z",
+    "link": { "rel": "self", "title": "Parameters", "href": "Parameters" },
+    "entry": [
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'8cb4d49b-fdb8-46ad-b3d5-4b50099a565e')",
+        "title": { "type": "text", "$t": "GivenName" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'8cb4d49b-fdb8-46ad-b3d5-4b50099a565e')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'8cb4d49b-fdb8-46ad-b3d5-4b50099a565e')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'8cb4d49b-fdb8-46ad-b3d5-4b50099a565e')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "8cb4d49b-fdb8-46ad-b3d5-4b50099a565e"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "GivenName",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      },
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'ac05c880-f075-4181-905f-9645413f49e8')",
+        "title": { "type": "text", "$t": "DisplayName" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'ac05c880-f075-4181-905f-9645413f49e8')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'ac05c880-f075-4181-905f-9645413f49e8')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'ac05c880-f075-4181-905f-9645413f49e8')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "ac05c880-f075-4181-905f-9645413f49e8"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "DisplayName",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      },
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'375bc88b-a6b6-458d-a832-a7a978d0532f')",
+        "title": { "type": "text", "$t": "sn" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'375bc88b-a6b6-458d-a832-a7a978d0532f')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'375bc88b-a6b6-458d-a832-a7a978d0532f')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'375bc88b-a6b6-458d-a832-a7a978d0532f')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "375bc88b-a6b6-458d-a832-a7a978d0532f"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "sn",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      },
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'708a026a-e87d-4854-b776-b9716a778372')",
+        "title": { "type": "text", "$t": "ExtentionAttribute1" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'708a026a-e87d-4854-b776-b9716a778372')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'708a026a-e87d-4854-b776-b9716a778372')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'708a026a-e87d-4854-b776-b9716a778372')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "708a026a-e87d-4854-b776-b9716a778372"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "ExtentionAttribute1",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      },
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'68668a06-e561-4bbc-9812-c70b180e1921')",
+        "title": { "type": "text", "$t": "Mail" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'68668a06-e561-4bbc-9812-c70b180e1921')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'68668a06-e561-4bbc-9812-c70b180e1921')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'68668a06-e561-4bbc-9812-c70b180e1921')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "68668a06-e561-4bbc-9812-c70b180e1921"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "Mail",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      },
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'ec1e9375-7c49-4ac3-8740-e20c67cb2a4f')",
+        "title": { "type": "text", "$t": "SamAccountName" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'ec1e9375-7c49-4ac3-8740-e20c67cb2a4f')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'ec1e9375-7c49-4ac3-8740-e20c67cb2a4f')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'ec1e9375-7c49-4ac3-8740-e20c67cb2a4f')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "ec1e9375-7c49-4ac3-8740-e20c67cb2a4f"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "SamAccountName",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      },
+      {
+        "id": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/RunbookParameters(guid'49aaf9ca-4c6f-4510-b657-e4c50283950f')",
+        "title": { "type": "text", "$t": "ExtentionAttribute2" },
+        "updated": "2021-02-01T10:54:47Z",
+        "author": { "name": {} },
+        "link": [
+          {
+            "rel": "edit",
+            "title": "RunbookParameter",
+            "href": "RunbookParameters(guid'49aaf9ca-4c6f-4510-b657-e4c50283950f')"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Runbook",
+            "type": "application/atom+xml;type=entry",
+            "title": "Runbook",
+            "href": "RunbookParameters(guid'49aaf9ca-4c6f-4510-b657-e4c50283950f')/Runbook"
+          },
+          {
+            "rel": "http://schemas.microsoft.com/ado/2007/08/dataservices/related/Instances",
+            "type": "application/atom+xml;type=feed",
+            "title": "Instances",
+            "href": "RunbookParameters(guid'49aaf9ca-4c6f-4510-b657-e4c50283950f')/Instances"
+          }
+        ],
+        "category": {
+          "term": "Microsoft.SystemCenter.Orchestrator.WebService.RunbookParameter",
+          "scheme": "http://schemas.microsoft.com/ado/2007/08/dataservices/scheme"
+        },
+        "content": {
+          "type": "application/xml",
+          "m:properties": {
+            "d:Id": {
+              "m:type": "Edm.Guid",
+              "$t": "49aaf9ca-4c6f-4510-b657-e4c50283950f"
+            },
+            "d:RunbookId": {
+              "m:type": "Edm.Guid",
+              "$t": "0d4d7fce-e099-4966-9efa-b4277f7e82ec"
+            },
+            "d:Name": "ExtentionAttribute2",
+            "d:Type": "String",
+            "d:Description": { "m:null": "true" },
+            "d:Direction": "In"
+          }
+        }
+      }
+    ]
+  }
+}

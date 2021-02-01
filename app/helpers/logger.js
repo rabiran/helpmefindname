@@ -1,7 +1,7 @@
 const { createLogger, format, transports, config } = require('winston');
 const appConfig = require('../config');
 const DailyRotateFile = require('winston-daily-rotate-file');
-
+const path = require('path');
 
 const ERROR = 'error';
 const INFO = 'info';
@@ -21,7 +21,7 @@ const initLogger = () => {
 const createMyLogger = type => {
 
     const dailyRotates = new DailyRotateFile({
-        filename: `logs/${type}/%DATE%-${type}.log`,
+        filename: path.resolve(__dirname, `../../logs/${type}/%DATE%-${type}.log`),
         datePattern: 'DD-MM-YYYY',
         maxSize: '1k'
     });

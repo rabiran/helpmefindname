@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../../.env')});
 const config = require('../config');
 const { initLogger } = require('../helpers/logger');
 const httpServer = require('../service/httpServer/server');
