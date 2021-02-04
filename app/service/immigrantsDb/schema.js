@@ -12,6 +12,11 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    migrationId:
+    {
+        type: String,
+        required: false,
+    },
     viewed: {
         type: Boolean,
         default: false
@@ -68,7 +73,8 @@ const schema = new mongoose.Schema({
                 },
                 required: false
             }]
-        }]
+        }],
+        required: false
     },
     shadowUsers: [{
         domainDataSource: {

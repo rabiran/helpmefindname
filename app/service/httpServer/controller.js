@@ -1,8 +1,8 @@
 const sendToService = require('../immigration');
-const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant, 
-dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant,
-dbDeleteImmigrant, dbGardenerStats, dbCompletedStats, dbTotalMigrationStats,
-dbGetImmigrantByPersonId } = require('../immigrantsDb/repository');
+const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant,
+    dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant,
+    dbDeleteImmigrant, dbGardenerStats, dbCompletedStats, dbTotalMigrationStats,
+    dbGetImmigrantByPersonId } = require('../immigrantsDb/repository');
 const { getPersonApi, orchRetry, orchPause } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
@@ -30,31 +30,46 @@ const addImmigrant = async (req, res) => {
 
     // const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
     const primaryDomainUser = person.domainUsers[primaryUniqueIdIndex];
-    if(!primaryDomainUser) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
+    if (!primaryDomainUser) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
     const result = await sendToService(person, primaryDomainUser, isNewUser, gardenerId)
-    .catch(err => { throw new HttpError(500, err.message, person.id) });
+        .catch(err => { throw new HttpError(500, err.message, person.id) });
 
     res.send(result);
+}
+
+const initImmigrant = async (req, res) => {
+    const { migrationId, steps } = req.body;
+    const { id } = req.params;
+
+    const progress = "inprogress";
+    const tommy = (subStep) => { return { name: subStep.name, progress } }
+    const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
+
+    const data = { 'status': { progress: 'inprogress', steps: stepsObj },
+                'migrationId': migrationId };
+    
+    const result = await dbUpdateImmigrant(id, data);
+    return res.send(result);
 }
 
 const updateImmigrant = async (req, res) => {
     const { step, subStep, progress, pause, unpauseable } = req.body;
     const { id } = req.params;
 
-    if(!id) throw new HttpError(400, 'no id');
+    if (!id) throw new HttpError(400, 'no id');
 
     const migration = await dbGetImmigrant(id);
 
-    if(pause) {
-        if(migration.unpauseable) {
+    if (pause) {
+        if (migration.unpauseable) {
             throw new HttpError(400, 'unpauseable!', id);
         }
-        const response = await orchPause({id, pause});
+        const response = await orchPause({ id, pause });
         return res.send(response);
     }
-    else if(unpauseable) {
-        const data = {'unpauseable': unpauseable};
+    else if (unpauseable) {
+        const data = { 'unpauseable': unpauseable };
         const result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
@@ -63,11 +78,11 @@ const updateImmigrant = async (req, res) => {
 
         const stepIndex = steps.findIndex((obj) => obj.name === step);
         const subStepIndex = steps[stepIndex].subSteps.findIndex((obj) => obj.name === subStep);
-        
-        const newSteps = {...steps};
+
+        const newSteps = { ...steps };
         newSteps[stepIndex].subSteps[subStepIndex].progress = progress;
 
-        const data = {'status.steps': newSteps};
+        const data = { 'status.steps': newSteps };
         const result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
@@ -96,7 +111,7 @@ const updateImmigrant = async (req, res) => {
 
 const retryStep = async (req, res) => {
     const { step, subStep, id } = req.body;
-    const response = await orchRetry({id, step, subStep});
+    const response = await orchRetry({ id, step, subStep });
     res.json(response);
 }
 
@@ -105,7 +120,7 @@ const deleteImmigrant = async (req, res) => {
     const dbstatus = await dbGetImmigrant(id);
     // if(dbstatus.status.progress !== 'completed')
     //     throw new HttpError(400, 'status needs to be completed');
-    
+
     await dbDeleteImmigrant(id);
     res.json('ok');
 }
@@ -129,6 +144,8 @@ const getTotalStats = async (req, res) => {
     res.json(stats);
 }
 
-module.exports = { status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep, 
-deleteImmigrant,
- getDomains, getCompletedStats, getGardenerStats, getTotalStats }
+module.exports = {
+    status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep,
+    deleteImmigrant, initImmigrant,
+    getDomains, getCompletedStats, getGardenerStats, getTotalStats
+}

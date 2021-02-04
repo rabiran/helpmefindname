@@ -29,25 +29,25 @@ module.exports = (normalizedPerson, primaryDomainUser, isNewUser) => {
     //     Rank: normalizedPerson.rank,
     // }
 
-    // return {
-    //     GivenName: normalizedPerson.firstName,
-    //     DisplayName: normalizedPerson.fullName,
-    //     sn: normalizedPerson.lastName,
-    //     ExtensionAttribute1: primaryDomainUserNormalized.adfsUID,
-    //     ExtensionAttribute2: `${primaryDomainUserNormalized.userName}@${primaryDomainUserNormalized.domainName}`,
-    //     Mail: normalizedPerson.mail,
-    //     SamAccountName: primaryDomainUserNormalized.userName
-    // }
-
     return {
-        ['8cb4d49b-fdb8-46ad-b3d5-4b50099a565e']: normalizedPerson.firstName,
-        ['ac05c880-f075-4181-905f-9645413f49e8']: normalizedPerson.fullName,
-        ['375bc88b-a6b6-458d-a832-a7a978d0532f']: normalizedPerson.lastName,
-        ['708a026a-e87d-4854-b776-b9716a778372']: primaryDomainUserNormalized.adfsUID,
-        ['49aaf9ca-4c6f-4510-b657-e4c50283950f']: `${primaryDomainUserNormalized.userName}@${primaryDomainUserNormalized.domainName}`,
-        ['68668a06-e561-4bbc-9812-c70b180e1921']: normalizedPerson.mail,
-        ['ec1e9375-7c49-4ac3-8740-e20c67cb2a4f']: primaryDomainUserNormalized.userName
+        GivenName: normalizedPerson.firstName,
+        DisplayName: normalizedPerson.fullName,
+        sn: normalizedPerson.lastName,
+        ExtentionAttribute1: primaryDomainUserNormalized.adfsUID,
+        ExtentionAttribute2: `${primaryDomainUserNormalized.userName}@${primaryDomainUserNormalized.domainName}`,
+        Mail: normalizedPerson.mail,
+        SamAccountName: primaryDomainUserNormalized.userName
     }
+
+    // return {
+    //     ['8cb4d49b-fdb8-46ad-b3d5-4b50099a565e']: normalizedPerson.firstName,
+    //     ['ac05c880-f075-4181-905f-9645413f49e8']: normalizedPerson.fullName,
+    //     ['375bc88b-a6b6-458d-a832-a7a978d0532f']: normalizedPerson.lastName,
+    //     ['708a026a-e87d-4854-b776-b9716a778372']: primaryDomainUserNormalized.adfsUID,
+    //     ['49aaf9ca-4c6f-4510-b657-e4c50283950f']: `${primaryDomainUserNormalized.userName}@${primaryDomainUserNormalized.domainName}`,
+    //     ['68668a06-e561-4bbc-9812-c70b180e1921']: normalizedPerson.mail,
+    //     ['ec1e9375-7c49-4ac3-8740-e20c67cb2a4f']: primaryDomainUserNormalized.userName
+    // }
 
     
     return {

@@ -15,6 +15,18 @@ const isValidPost = (req, res, next) => {
     next();
 }
 
+const isValidInit = (req, res, next) => {
+    const { migrationId, steps } = req.body;
+
+    if(!isProperType(migrationId, 'string')) {
+        throw new HttpError(400, 'id must be string');
+    }
+    else if(!isProperType(steps, 'object')) {
+        throw new HttpError(400, 'steps must be array');
+    }
+    next();
+}
+
 const isValidPut = (req, res, next) => {
     const { step, subStep, progress } = req.body;
 
@@ -34,4 +46,4 @@ const isValidPut = (req, res, next) => {
 
 const isProperType = (value, type) => (value !== undefined && typeof(value) === type)
 
-module.exports = { isValidPost, isValidPut }
+module.exports = { isValidPost, isValidPut, isValidInit }

@@ -27,14 +27,16 @@ module.exports = async (person, primaryDomainUser, isNewUser = false, gardenerId
         const targetADuser = targetConverter(normalizedPerson, primaryDomainUser, isNewUser);
         const response = await createInTargetOrch(targetADuser);
 
-        const progress = "inprogress";
-        const tommy = (subStep) => { return {name: subStep.name, progress}}
-        const steps = response.steps.map(step => { return {name: step.name, subSteps: step.subSteps.map(tommy), progress}  } );
+        // throw new Error("done");
 
-        console.log("should not get here");
+        // const progress = "inprogress";
+        // const tommy = (subStep) => { return {name: subStep.name, progress}}
+        // const steps = response.steps.map(step => { return {name: step.name, subSteps: step.subSteps.map(tommy), progress}  } );
+
+        // console.log("should not get here");
 
         const data = {
-            _id: response.id,
+            _id: normalizedPerson.id,
             personId: normalizedPerson.id,
             status: { progress: 'inprogress', steps: steps },
             primaryDomainUser: primaryDomainUser.dataSource,

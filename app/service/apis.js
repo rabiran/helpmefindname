@@ -74,8 +74,9 @@ const createInTargetOrch = async (data) => {
     const runBookId = config.orchCreateRunbookId;
     const params = await getOrchParams(runBookId);
     const mergedDataWithParams =  {};
-    Object.keys(params).forEach(param => {
-        mergedDataWithParams[params[param]] = data[params[param]];
+    Object.keys(data).forEach(myfield => {
+        const idOfParam = params[myfield];
+        mergedDataWithParams[idOfParam] = data[myfield];
     });
 
     console.log(mergedDataWithParams);
@@ -103,8 +104,12 @@ const createInTargetOrch = async (data) => {
         throw new Error('failed sending stuff to orch');
     })
 
-    console.log(xml);
+    // console.log(xml);
+    console.log("================================");
+    console.log("================================");
     console.log(response.body);
+    console.log("================================");
+
     if(response.statusCode === 401) throw new Error('Unauthorized for orch');
     if(response.statusCode === 400) throw new Error('Validation failed for orch');
 

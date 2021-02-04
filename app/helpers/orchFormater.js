@@ -44,9 +44,13 @@ module.exports = (data, runBookId) => {
         gibrish+=openTag;
         gibrish+='Value';
         gibrish+=closeTag;
-        gibrish+=`{${data[key]}}`;
+        gibrish+=`${data[key]}`;
         gibrish+=openTag;
         gibrish+='/Value';
+        gibrish+=closeTag;
+
+        gibrish+=openTag;
+        gibrish+='/Parameter';
         gibrish+=closeTag;
 
         console.log("============");
