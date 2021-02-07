@@ -37,8 +37,8 @@ module.exports = async (person, primaryDomainUser, isNewUser = false, gardenerId
 
         const data = {
             _id: normalizedPerson.id,
-            personId: normalizedPerson.id,
-            status: { progress: 'inprogress', steps: steps },
+            // personId: normalizedPerson.id,
+            status: { progress: 'inprogress' },
             primaryDomainUser: primaryDomainUser.dataSource,
             hierarchy: normalizedPerson.hierarchy.join('/'),
             gardenerId,

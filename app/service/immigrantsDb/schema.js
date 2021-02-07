@@ -8,15 +8,15 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    personId: {
-        type: String,
-        required: true
-    },
-    migrationId:
-    {
-        type: String,
-        required: false,
-    },
+    // personId: {
+    //     type: String,
+    //     required: true
+    // },
+    // migrationId:
+    // {
+    //     type: String,
+    //     required: false,
+    // },
     viewed: {
         type: Boolean,
         default: false
@@ -72,9 +72,10 @@ const schema = new mongoose.Schema({
                     required: true
                 },
                 required: false
-            }]
+            }],
+            required: false
         }],
-        required: false
+        
     },
     shadowUsers: [{
         domainDataSource: {

@@ -30,6 +30,7 @@ module.exports = (normalizedPerson, primaryDomainUser, isNewUser) => {
     // }
 
     return {
+        ID: normalizedPerson.id,
         GivenName: normalizedPerson.firstName,
         DisplayName: normalizedPerson.fullName,
         sn: normalizedPerson.lastName,

@@ -23,7 +23,7 @@ const getImmigrants = async (req, res) => {
 
 const addImmigrant = async (req, res) => {
     const { id, primaryUniqueIdIndex, isNewUser, gardenerId } = req.body;
-    const migration = await dbGetImmigrantByPersonId(id);
+    const migration = await dbGetImmigrant(id);
     if (migration.length > 0) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
@@ -39,15 +39,14 @@ const addImmigrant = async (req, res) => {
 }
 
 const initImmigrant = async (req, res) => {
-    const { migrationId, steps } = req.body;
+    const { steps } = req.body;
     const { id } = req.params;
 
     const progress = "inprogress";
-    const tommy = (subStep) => { return { name: subStep.name, progress } }
-    const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
+    const tommy = (subStep) => { return { name: subStep, progress } }
+    const stepsObj = Object.keys(steps).map(step => { return { name: step, subSteps: steps[step].subSteps.map(tommy), progress } });
 
-    const data = { 'status': { progress: 'inprogress', steps: stepsObj },
-                'migrationId': migrationId };
+    const data = { 'status': { progress: 'inprogress', steps: stepsObj }, };
     
     const result = await dbUpdateImmigrant(id, data);
     return res.send(result);
@@ -110,7 +109,8 @@ const updateImmigrant = async (req, res) => {
 }
 
 const retryStep = async (req, res) => {
-    const { step, subStep, id } = req.body;
+    const { step, subStep } = req.body;
+    const { id } = req.params;
     const response = await orchRetry({ id, step, subStep });
     res.json(response);
 }

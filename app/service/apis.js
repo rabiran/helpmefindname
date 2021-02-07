@@ -55,15 +55,15 @@ const getOrchParams = async (runBookId) => {
         password: pass,
         workstation: '',
         domain: domain,
-        headers: {'Content-Type': 'application/atom+xml'}
+        headers: { 'Content-Type': 'application/atom+xml' }
     };
 
     const response = await antlmGet(options).catch(err => {
         console.log(err);
         throw new Error('failed getting orch params');
     });
-    if(response.statusCode === 401) throw new Error('Unauthorized for orch');
-    if(response.statusCode === 400) throw new Error('Validation failed for orch');
+    if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if (response.statusCode === 400) throw new Error('Validation failed for orch');
 
     const xmlParams = response.body;
     const params = orchParamParser(xmlParams);
@@ -73,7 +73,7 @@ const getOrchParams = async (runBookId) => {
 const createInTargetOrch = async (data) => {
     const runBookId = config.orchCreateRunbookId;
     const params = await getOrchParams(runBookId);
-    const mergedDataWithParams =  {};
+    const mergedDataWithParams = {};
     Object.keys(data).forEach(myfield => {
         const idOfParam = params[myfield];
         mergedDataWithParams[idOfParam] = data[myfield];
@@ -96,7 +96,7 @@ const createInTargetOrch = async (data) => {
         workstation: '',
         domain: domain,
         body: xml,
-        headers: {'Content-Type': 'application/atom+xml'}
+        headers: { 'Content-Type': 'application/atom+xml' }
     };
 
     const response = await antlmPost(options).catch(err => {
@@ -110,12 +110,12 @@ const createInTargetOrch = async (data) => {
     console.log(response.body);
     console.log("================================");
 
-    if(response.statusCode === 401) throw new Error('Unauthorized for orch');
-    if(response.statusCode === 400) throw new Error('Validation failed for orch');
+    if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if (response.statusCode === 400) throw new Error('Validation failed for orch');
 
 
     return response.body;
-    
+
     return {
         "id": "1",
         "steps": [
@@ -144,10 +144,22 @@ const createInTargetOrch = async (data) => {
                     }
                 ]
             }
-         ]     
+        ]
     }
 
-    
+    return
+    [
+        {
+            "name": "making pizza",
+            "subSteps": ["preparing", "baking"]
+        },
+        {
+            "name": "delivering pizza",
+            "subSteps": ["finding adress", "delivering", "accepting payment"]
+        }
+    ]
+
+
     // const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
 
     // const res = await retry(orchRequest).catch(err => {
@@ -165,13 +177,15 @@ const orchPause = async (data) => {
     const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
-    const headers = { auth: { 
-        username: config.targetOrchUser, 
-        password: config.targetOrchPass 
-    }};
+    const headers = {
+        auth: {
+            username: config.targetOrchUser,
+            password: config.targetOrchPass
+        }
+    };
     const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
-    const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
+    const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
 
     const res = await retry(orchRequest).catch(err => {
         console.log(err);
@@ -187,13 +201,15 @@ const orchRetry = async (data) => {
     const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
-    const headers = { auth: { 
-        username: config.targetOrchUser, 
-        password: config.targetOrchPass 
-    }};
+    const headers = {
+        auth: {
+            username: config.targetOrchUser,
+            password: config.targetOrchPass
+        }
+    };
     const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
-    const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
+    const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
 
     const res = await retry(orchRequest).catch(err => {
         console.log(err);
