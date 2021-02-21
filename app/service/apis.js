@@ -99,6 +99,8 @@ const createInTargetOrch = async (data) => {
         headers: { 'Content-Type': 'application/atom+xml' }
     };
 
+    return true;
+    
     const response = await antlmPost(options).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');

@@ -16,9 +16,9 @@ const isValidPost = (req, res, next) => {
 }
 
 const isValidInit = (req, res, next) => {
-    const { steps } = req.body;
+    // const { steps } = req.body;
 
-    if(!isProperType(steps, 'object')) {
+    if(!isProperType(req.body, 'object')) {
         throw new HttpError(400, 'steps must be array');
     }
     next();

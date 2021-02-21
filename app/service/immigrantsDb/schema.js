@@ -71,11 +71,12 @@ const schema = new mongoose.Schema({
                     enum: progressEnum,
                     required: true
                 },
-                required: false
+                required: false,
+                _id: false
             }],
-            required: false
+            required: false,
+            _id: false
         }],
-        
     },
     shadowUsers: [{
         domainDataSource: {
@@ -96,10 +97,22 @@ schema.set('toJSON', {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
-        if(ret.shadowUsers)
-            for(user of ret.shadowUsers) {
-                delete user._id;
-            }
+        // if(ret.shadowUsers)
+        //     for(user of ret.shadowUsers) {
+        //         delete user._id;
+        //     }
+
+        // if(ret.status.steps) {
+        //     for(step of ret.steps) {
+        //         delete step._id;
+
+        //         if(step.subStep) {
+        //             for(subStep of step.subSteps) {
+        //                 delete subStep._id;
+        //             }
+        //         }
+        //     }
+        // }
     }
 }); 
 

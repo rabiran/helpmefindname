@@ -6,6 +6,7 @@ const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant,
 const { getPersonApi, orchRetry, orchPause } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
+const { Http } = require('winston/lib/winston/transports');
 // const { createInTargetOrch } = require('../apis');
 const status = async (req, res) => {
     res.send('service on');
@@ -24,7 +25,7 @@ const getImmigrants = async (req, res) => {
 const addImmigrant = async (req, res) => {
     const { id, primaryUniqueIdIndex, isNewUser, gardenerId } = req.body;
     const migration = await dbGetImmigrant(id);
-    if (migration.length > 0) throw new HttpError(400, 'already exists', id);
+    if (migration) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
 
@@ -39,12 +40,12 @@ const addImmigrant = async (req, res) => {
 }
 
 const initImmigrant = async (req, res) => {
-    const { steps } = req.body;
+    const steps = req.body;
     const { id } = req.params;
 
     const progress = "inprogress";
     const tommy = (subStep) => { return { name: subStep, progress } }
-    const stepsObj = Object.keys(steps).map(step => { return { name: step, subSteps: steps[step].subSteps.map(tommy), progress } });
+    const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
 
     const data = { 'status': { progress: 'inprogress', steps: stepsObj }, };
     
@@ -58,7 +59,8 @@ const updateImmigrant = async (req, res) => {
 
     if (!id) throw new HttpError(400, 'no id');
 
-    const migration = await dbGetImmigrant(id);
+    const tfu = await dbGetImmigrant(id);
+    const migration = tfu.toObject();
 
     if (pause) {
         if (migration.unpauseable) {
@@ -73,16 +75,18 @@ const updateImmigrant = async (req, res) => {
         return res.send(result);
     }
     else {
-        const steps = migration.steps;
+        const steps = migration.status.steps;
 
         const stepIndex = steps.findIndex((obj) => obj.name === step);
+        if(stepIndex === -1) throw new HttpError(400, 'step not found');
         const subStepIndex = steps[stepIndex].subSteps.findIndex((obj) => obj.name === subStep);
+        if(subStepIndex === -1) throw new HttpError(400, 'subStep not found');
 
-        const newSteps = { ...steps };
+        const newSteps = JSON.parse(JSON.stringify(steps)); // deep copy
         newSteps[stepIndex].subSteps[subStepIndex].progress = progress;
 
-        const data = { 'status.steps': newSteps };
-        const result = await dbUpdateImmigrant(id, data);
+        const data = { 'status.steps': newSteps  };
+        let result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
 
