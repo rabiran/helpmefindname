@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "5c5dc33e-cb50-4017-8b60-d7c1b2855ecf",
+		"name": "g",
+		"description": "to test g",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost",
+			"item": [
+				{
+					"name": "get everyone local",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/immigrant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"immigrant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new local",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsT0s2d01-U21VS2ZwZXZxVVY4bVdRSGdzd0NBV2IiLCJzdWIiOiJ3ZllxXzJWYnZYWU1vc091YW9DUDVTMUFmejF6a2c0UFRkRGhkTnlyIiwic2NvcGUiOlsid3JpdGUiXSwiY2xpZW50SWQiOiJ3ZllxXzJWYnZYWU1vc091YW9DUDVTMUFmejF6a2c0UFRkRGhkTnlyIiwiY2xpZW50TmFtZSI6IkdhcmRlbiIsImlhdCI6MTYwNTA5NTY0OSwiZXhwIjoxNjA1MDk1ODI5LCJpc3MiOiJodHRwczovLzUxLjE0NC4xNzguMTIxIn0.vYocn02NlSvavTowhZXXJ38Y25bbOpuujn6i7pH_NLvVrye8G-tGnR51g5GCxP4JjAvo2z7c_mbgF08I0w4W96loH0xM3vBqB2HH_EcAA9ptjB4Sf9h1PRU6euj7AlNuKOSwtUXZKFv4ko8NXZPdM9emzxz9R_Q-rz9hGEitqdAQxU_tzmb1-btg7D3ZmRFcvTFN5teziWgJZhJjeCJRpyuLLzdjXwg4OGdn9SY82bytU-FF8fqmJ1Jcc5as1fXQqNaoqsiBhLMVpTCVBhpZMRUwDU1ame3klQbqDYnSGaK_lEJnJr8t5EFYip7wn3ERiBRfIhCELrYzsd4g37jbcA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"5f730ea2eaa6861b4a213cc8\",\n    \"gardenerId\": \"2\",\n    \"primaryUniqueIdIndex\": 0,\n    \"isNewUser\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/immigrant",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"immigrant"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update step local",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"step\": \"making pizza\",\n    \"subStep\": \"preparing\",\n    \"progress\": \"completed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/immigrant/5f730ea2eaa6861b4a213cc8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"immigrant",
+								"5f730ea2eaa6861b4a213cc8"
+							]
+						},
+						"description": "update step.\n\nmodify the shadowUser, the fields can be anything atm, the domainUser must be to whatever was creating."
+					},
+					"response": []
+				},
+				{
+					"name": "init steps local",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n        {\n            \"name\": \"making pizza\",\n            \"subSteps\": [\"preparing\", \"baking\"]\n        },\n        {\n            \"name\": \"delivering pizza\",\n            \"subSteps\": [\"finding adress\", \"delivering\", \"accepting payment\"]\n        }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/immigrant/init/5f730ea2eaa6861b4a213cc8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"immigrant",
+								"init",
+								"5f730ea2eaa6861b4a213cc8"
+							]
+						},
+						"description": "update step.\n\nmodify the shadowUser, the fields can be anything atm, the domainUser must be to whatever was creating."
+					},
+					"response": []
+				},
+				{
+					"name": "delete migration local",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n        {\n            \"name\": \"making pizza\",\n            \"subSteps\": [\"preparing\", \"baking\"]\n        },\n        {\n            \"name\": \"delivering pizza\",\n            \"subSteps\": [\"finding adress\", \"delivering\", \"accepting payment\"]\n        }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/immigrant/5f730ea2eaa6861b4a213cc8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"immigrant",
+								"5f730ea2eaa6861b4a213cc8"
+							]
+						},
+						"description": "update step.\n\nmodify the shadowUser, the fields can be anything atm, the domainUser must be to whatever was creating."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "get everyone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://migrationservice.westeurope.cloudapp.azure.com/api/immigrant",
+					"protocol": "http",
+					"host": [
+						"migrationservice",
+						"westeurope",
+						"cloudapp",
+						"azure",
+						"com"
+					],
+					"path": [
+						"api",
+						"immigrant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJsT0s2d01-U21VS2ZwZXZxVVY4bVdRSGdzd0NBV2IiLCJzdWIiOiJ3ZllxXzJWYnZYWU1vc091YW9DUDVTMUFmejF6a2c0UFRkRGhkTnlyIiwic2NvcGUiOlsid3JpdGUiXSwiY2xpZW50SWQiOiJ3ZllxXzJWYnZYWU1vc091YW9DUDVTMUFmejF6a2c0UFRkRGhkTnlyIiwiY2xpZW50TmFtZSI6IkdhcmRlbiIsImlhdCI6MTYwNTA5NTY0OSwiZXhwIjoxNjA1MDk1ODI5LCJpc3MiOiJodHRwczovLzUxLjE0NC4xNzguMTIxIn0.vYocn02NlSvavTowhZXXJ38Y25bbOpuujn6i7pH_NLvVrye8G-tGnR51g5GCxP4JjAvo2z7c_mbgF08I0w4W96loH0xM3vBqB2HH_EcAA9ptjB4Sf9h1PRU6euj7AlNuKOSwtUXZKFv4ko8NXZPdM9emzxz9R_Q-rz9hGEitqdAQxU_tzmb1-btg7D3ZmRFcvTFN5teziWgJZhJjeCJRpyuLLzdjXwg4OGdn9SY82bytU-FF8fqmJ1Jcc5as1fXQqNaoqsiBhLMVpTCVBhpZMRUwDU1ame3klQbqDYnSGaK_lEJnJr8t5EFYip7wn3ERiBRfIhCELrYzsd4g37jbcA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"5f730ea2eaa6861b4a213cc8\",\n    \"gardenerId\": \"2\",\n    \"primaryDomainUser\": \"ads_name\",\n    \"isNewUser\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://migrationservice.westeurope.cloudapp.azure.com/api/immigrant",
+					"protocol": "http",
+					"host": [
+						"migrationservice",
+						"westeurope",
+						"cloudapp",
+						"azure",
+						"com"
+					],
+					"path": [
+						"api",
+						"immigrant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update step",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"step\": \"making pizza\",\n    \"subStep\": \"preparing\",\n    \"progress\": \"completed\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://migrationservice.westeurope.cloudapp.azure.com/api/immigrant/5f730ea2eaa6861b4a213cc8",
+					"protocol": "http",
+					"host": [
+						"migrationservice",
+						"westeurope",
+						"cloudapp",
+						"azure",
+						"com"
+					],
+					"path": [
+						"api",
+						"immigrant",
+						"5f730ea2eaa6861b4a213cc8"
+					]
+				},
+				"description": "update step.\n\nmodify the shadowUser, the fields can be anything atm, the domainUser must be to whatever was creating."
+			},
+			"response": []
+		},
+		{
+			"name": "init steps",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n        {\n            \"name\": \"making pizza\",\n            \"subSteps\": [\"preparing\", \"baking\"]\n        },\n        {\n            \"name\": \"delivering pizza\",\n            \"subSteps\": [\"finding adress\", \"delivering\", \"accepting payment\"]\n        }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://migrationservice.westeurope.cloudapp.azure.com/api/immigrant/init/5f730ea2eaa6861b4a213cc8",
+					"protocol": "http",
+					"host": [
+						"migrationservice",
+						"westeurope",
+						"cloudapp",
+						"azure",
+						"com"
+					],
+					"path": [
+						"api",
+						"immigrant",
+						"init",
+						"5f730ea2eaa6861b4a213cc8"
+					]
+				},
+				"description": "update step.\n\nmodify the shadowUser, the fields can be anything atm, the domainUser must be to whatever was creating."
+			},
+			"response": []
+		},
+		{
+			"name": "delete migration",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n        {\n            \"name\": \"making pizza\",\n            \"subSteps\": [\"preparing\", \"baking\"]\n        },\n        {\n            \"name\": \"delivering pizza\",\n            \"subSteps\": [\"finding adress\", \"delivering\", \"accepting payment\"]\n        }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://migrationservice.westeurope.cloudapp.azure.com/api/immigrant/5f730ea2eaa6861b4a213cc8",
+					"protocol": "http",
+					"host": [
+						"migrationservice",
+						"westeurope",
+						"cloudapp",
+						"azure",
+						"com"
+					],
+					"path": [
+						"api",
+						"immigrant",
+						"5f730ea2eaa6861b4a213cc8"
+					]
+				},
+				"description": "update step.\n\nmodify the shadowUser, the fields can be anything atm, the domainUser must be to whatever was creating."
+			},
+			"response": []
+		},
+		{
+			"name": "orch params",
+			"request": {
+				"auth": {
+					"type": "ntlm",
+					"ntlm": [
+						{
+							"key": "password",
+							"value": "Louie555",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "dana",
+							"type": "string"
+						},
+						{
+							"key": "domain",
+							"value": "Dana.lab",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://40.71.3.52:81/Orchestrator2012/Orchestrator.svc/Runbooks(guid'0d4d7fce-e099-4966-9efa-b4277f7e82ec')/Parameters",
+					"protocol": "http",
+					"host": [
+						"40",
+						"71",
+						"3",
+						"52"
+					],
+					"port": "81",
+					"path": [
+						"Orchestrator2012",
+						"Orchestrator.svc",
+						"Runbooks(guid'0d4d7fce-e099-4966-9efa-b4277f7e82ec')",
+						"Parameters"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
