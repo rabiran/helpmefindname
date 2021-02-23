@@ -43,10 +43,13 @@ const initImmigrant = async (req, res) => {
     const steps = req.body;
     const { id } = req.params;
     
+    console.log("Steps: ");
+    console.log(steps);
+
     const tfu = await dbGetImmigrant(id);
 
     if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
-    
+
     const progress = "inprogress";
     const tommy = (subStep) => { return { name: subStep, progress } }
     const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
@@ -68,6 +71,11 @@ const updateImmigrant = async (req, res) => {
     if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
 
     const migration = tfu.toObject();
+
+    console.log("update: ");
+    console.log(step);
+    console.log(subStep);
+    console.log(progress);
 
     if (pause) {
         if (migration.unpauseable) {

@@ -3,7 +3,7 @@ version: '3'
 services:
     g:
         container_name: gservice
-        image: suharik/gimage
+        image: suharik/gimage:try
         # build: .
         restart: unless-stopped
         env_file: docker-compose.env
