@@ -7,7 +7,7 @@ services:
         restart: unless-stopped
         env_file: docker-compose.env
         ports:
-            - "8080:8080"
+            - "8000:8000"
         environment: 
             - DB_URL= mongodb://guser:password2@mongo:27017/g
             - REDIS_URL= redis://:password3@redis:6379
@@ -37,7 +37,7 @@ services:
         ports:
             - "27017:27017"
         volumes:
-            - ./data:/data/db
+            - /data:/data/db
         deploy:
             mode: replicated
             replicas: 2
@@ -52,7 +52,7 @@ services:
         ports:
             - "6379:6379"
         volumes:
-            - ./data:/data/redis
+            - /data:/data/redis
         deploy:
             mode: replicated
             replicas: 2
