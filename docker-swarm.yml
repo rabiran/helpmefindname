@@ -3,6 +3,7 @@ version: '3'
 services:
     g:
         container_name: gservice
+        image: gservice
         build: .
         restart: unless-stopped
         env_file: docker-compose.env
