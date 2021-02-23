@@ -16,8 +16,8 @@ services:
             - mongo
             - redis
         deploy:
-            mode: replicated
-            replicas: 2
+            mode: global
+            # replicas: 2
             # placement:
             #     constraints:
             #     - node.hostname == node1
@@ -40,8 +40,8 @@ services:
         volumes:
             - /data:/data/db
         deploy:
-            mode: replicated
-            replicas: 2
+            mode: global
+            # replicas: 2
         
     redis:
         container_name: gredis
@@ -55,5 +55,5 @@ services:
         volumes:
             - /data:/data/redis
         deploy:
-            mode: replicated
-            replicas: 2
+            mode: global
+            # replicas: 2
