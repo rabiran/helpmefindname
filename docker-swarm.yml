@@ -3,12 +3,12 @@ version: '3'
 services:
     g:
         container_name: gservice
-        image: gservice
-        build: .
+        image: suharik/gimage
+        # build: .
         restart: unless-stopped
         env_file: docker-compose.env
         ports:
-            - "8000:8000"
+            - "3000:8000"
         environment: 
             - DB_URL= mongodb://guser:password2@mongo:27017/g
             - REDIS_URL= redis://:password3@redis:6379
