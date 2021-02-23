@@ -42,7 +42,11 @@ const addImmigrant = async (req, res) => {
 const initImmigrant = async (req, res) => {
     const steps = req.body;
     const { id } = req.params;
+    
+    const tfu = await dbGetImmigrant(id);
 
+    if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
+    
     const progress = "inprogress";
     const tommy = (subStep) => { return { name: subStep, progress } }
     const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
@@ -60,6 +64,9 @@ const updateImmigrant = async (req, res) => {
     if (!id) throw new HttpError(400, 'no id');
 
     const tfu = await dbGetImmigrant(id);
+
+    if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
+
     const migration = tfu.toObject();
 
     if (pause) {
