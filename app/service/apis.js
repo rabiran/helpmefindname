@@ -114,6 +114,7 @@ const createInTargetOrch = async (data) => {
     if (response.statusCode === 400) throw new Error('Validation failed for orch');
 
 
+    console.log("NO ERROR SENDING TO ORCH");
     return response.body;
 
     return {

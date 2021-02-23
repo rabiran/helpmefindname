@@ -2,8 +2,11 @@ const express = require('express');
 const router = require('./routes');
 const { handleHttpError } = require ('../../helpers/errorHandlers/httpError');
 const { log } = require('../../helpers/logger');
+const morganLogger = require('morgan');
 
 const app = express();
+
+app.use(morganLogger('dev'));
 
 app.use(express.json());
 
