@@ -23,6 +23,6 @@ module.exports = {
     specialDomain: 'dataSource1',
     specialMailServer: 'hahaha.com',
     targetDomain: 'damoi.com',
-    auth: false,
+    isAuth: true,
     isMock: false,
 }
