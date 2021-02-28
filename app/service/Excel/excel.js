@@ -1,9 +1,9 @@
-const config = require("../../config");
+let config = require("../../config");
 const _ = require("lodash");
 const xlsx = require("xlsx");
 
 const updateExcel = () => {
-  const workbook = xlsx.readFile("./dataSourcesMap.xlsx");
+  const workbook = xlsx.readFile(config.excelPath);
   const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
   const columnA = [];
@@ -25,10 +25,11 @@ const updateExcel = () => {
 };
 
 const getExcelJson = () => {
-    let obj = {"akaAdkatz": config.akaAdkatz , "akaKapaim": config.akaKapaim};
-    return obj;
-}
+  let obj = { akaAdkatz: config.akaAdkatz, akaKapaim: config.akaKapaim };
+  return obj;
+};
 
 module.exports = {
-    getExcelJson, updateExcel
-}
+  getExcelJson,
+  updateExcel,
+};

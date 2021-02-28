@@ -10,6 +10,7 @@ module.exports = {
     tokenAudience: 'kartoffel',
     tokenRedisKeyName: 'token',
     spikePublicKeyFullPath: path.join(__dirname, './key.pem'),
+    
     useRedis: true,
     httpsValidation: false,
 }
