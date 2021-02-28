@@ -18,13 +18,14 @@ const { HttpError, handleHttpError } = require('../../helpers/errorHandlers/http
  * @param shadowUsers optional field if there are shadowUsers already
  * prepares everything for orchestration and starts the process.
  */
-module.exports = async (person, primaryDomainUser, isNewUser = false, gardenerId, shadowUsers = []) => {
+module.exports = async (person, primaryUniqueId, isNewUser = false, gardenerId, startDate,shadowUsers = []) => {
     try {
         console.log('service iteration');
         const normalizedPerson = personNormalizer(person);
         // const id = normalizedPerson.id;
+        
 
-        const targetADuser = targetConverter(normalizedPerson, primaryDomainUser, isNewUser);
+        const targetADuser = targetConverter(normalizedPerson, primaryUniqueId, isNewUser,startDate);
         const response = await createInTargetOrch(targetADuser);
 
         // throw new Error("done");

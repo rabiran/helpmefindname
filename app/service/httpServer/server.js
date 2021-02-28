@@ -3,6 +3,7 @@ const router = require('./routes');
 const { handleHttpError } = require ('../../helpers/errorHandlers/httpError');
 const { log } = require('../../helpers/logger');
 const morganLogger = require('morgan');
+const {updateExcel} = require('../Excel/excel')
 
 const app = express();
 
@@ -20,6 +21,7 @@ const start = (port) => {
     app.listen(port, () => {
         log(`http service running at ${port}`)
     })
+    updateExcel();
     return app;
 }
 

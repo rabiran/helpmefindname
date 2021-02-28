@@ -25,4 +25,11 @@ module.exports = {
     targetDomain: 'damoi.com',
     auth: false,
     isMock: false,
+    akaKapaim:[
+
+    ],
+    akaAdkatz:[
+        
+    ],
+    entityTypeG: "g"
 }
