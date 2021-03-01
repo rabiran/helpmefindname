@@ -85,13 +85,13 @@ const dbTotalMigrationStats = async () => {
 
 const dbCompletedStats = async () => {
     const res = await schema.find({'status.progress': 'completed'});
-    const primaryDomains = res.map((record)=> record.primaryDomainUser);
+    const primaryDomains = res.map((record)=> record.primaryUniqueId);
     const distinctDomains = [...new Set(primaryDomains)];
 
     const stats = await Promise.all(distinctDomains.map(async (domain)=> {
         const count = await schema.countDocuments({
             "$and": [ 
-                {primaryDomainUser: domain},
+                {primaryUniqueId: domain.uniqueID},
                 {'status.progress': 'completed'} 
             ]
         });

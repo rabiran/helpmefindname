@@ -35,9 +35,9 @@ const addImmigrant = async (req, res) => {
 
     const person = await getPersonApi(id);
 
-    // const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
+    const isDomainFound = person.domainUsers.find(user => user.uniqueID === primaryUniqueId);
     // const primaryDomainUser = person.domainUsers[primaryUniqueId];
-    if (!primaryUniqueId) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
+    if (!isDomainFound) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
     const result = await sendToService(person, primaryUniqueId, isNewUser, gardenerId, startDate)
         .catch(err => { throw new HttpError(500, err.message, person.id) });

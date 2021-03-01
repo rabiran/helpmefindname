@@ -48,7 +48,7 @@ module.exports = async (
       startDate
     );
     const response = await createInTargetOrch(targetADuser);
-
+    
     // throw new Error("done");
 
     // const progress = "inprogress";
@@ -66,6 +66,7 @@ module.exports = async (
       gardenerId,
       fullName: normalizedPerson.fullName,
       identifier: normalizedPerson.identifier || "12345",
+      startDate: startDate || new Date(),
     };
     const result = await dbAddImmigrant(data);
     return result;

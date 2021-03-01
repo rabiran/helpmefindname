@@ -39,8 +39,7 @@ module.exports = (normalizedPerson, primaryUniqueId, isNewUser, startDate) => {
         Mail: normalizedPerson.mail,
         SamAccountName: primaryDomainUserNormalized.userName,
         IsNewUser: isNewUser,
-        StartDate: startDate,
-
+        // StartDate: startDate,
     }
 
     // return {
