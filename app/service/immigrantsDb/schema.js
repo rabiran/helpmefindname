@@ -21,7 +21,7 @@ const schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    primaryDomainUser: {
+    primaryUniqueId: {
         type: String,
         required: true
     },
@@ -45,6 +45,11 @@ const schema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false,
+    },
+    startDate: {
+        type: Date,
+        required: true,
+        default: new Date(),
     },
     status: {
         progress: {

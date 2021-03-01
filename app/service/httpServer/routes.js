@@ -5,7 +5,7 @@ const { isValidPost, isValidPut, isValidInit } = require('./validator');
 const { isAuth } = require('./auth');
 const { status, getImmigrants,
 addImmigrant, updateImmigrant, initImmigrant, getImmigrantsByGardener, deleteImmigrant, retryStep, getDomains,
-getCompletedStats, getGardenerStats, getTotalStats } = require('./controller');
+getCompletedStats, getGardenerStats, getTotalStats, getExcel } = require('./controller');
 
 router.get('/health', wa(status) );
 router.get('/immigrant', isAuth, wa(getImmigrants) );
@@ -22,6 +22,8 @@ router.get('/stats/completed', wa(getCompletedStats));
 router.get('/stats/gardeners', wa(getGardenerStats));
 router.get('/stats/total', wa(getTotalStats));
 // router.get('/stata', wa(getDomains));
+
+router.get('/excel', isAuth, wa(getExcel))
 
 router.get('/domains', wa(getDomains));
 

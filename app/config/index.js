@@ -1,3 +1,4 @@
+const path = require("path");
 module.exports = {
     env: process.env.NODE_ENV,
     dbOptions: { useUnifiedTopology: true , useNewUrlParser: true },
@@ -25,4 +26,12 @@ module.exports = {
     targetDomain: 'damoi.com',
     isAuth: true,
     isMock: false,
+    excelPath: path.join(__dirname, './dataSourcesMap.xlsx'),
+    akaKapaim:[
+
+    ],
+    akaAdkatz:[
+        
+    ],
+    entityTypeG: "g"
 }

@@ -6,10 +6,16 @@ const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant,
 const { getPersonApi, orchRetry, orchPause } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
+const {getExcelJson} = require('../Excel/excel')
 const { Http } = require('winston/lib/winston/transports');
 // const { createInTargetOrch } = require('../apis');
 const status = async (req, res) => {
     res.send('service on');
+}
+
+const  getExcel = async (req,res) =>{
+    const excelJs = getExcelJson();
+    res.json(excelJs);
 }
 
 const getImmigrantsByGardener = async (req, res) => {
@@ -23,17 +29,17 @@ const getImmigrants = async (req, res) => {
 }
 
 const addImmigrant = async (req, res) => {
-    const { id, primaryUniqueIdIndex, isNewUser, gardenerId } = req.body;
+    const { id, primaryUniqueId, isNewUser, gardenerId , startDate} = req.body;
     const migration = await dbGetImmigrant(id);
     if (migration) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
 
-    // const isDomainFound = person.domainUsers.find(user => user.dataSource === primaryDomainUser);
-    const primaryDomainUser = person.domainUsers[primaryUniqueIdIndex];
-    if (!primaryDomainUser) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
+    const isDomainFound = person.domainUsers.find(user => user.uniqueID === primaryUniqueId);
+    // const primaryDomainUser = person.domainUsers[primaryUniqueId];
+    if (!isDomainFound) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
-    const result = await sendToService(person, primaryDomainUser, isNewUser, gardenerId)
+    const result = await sendToService(person, primaryUniqueId, isNewUser, gardenerId, startDate)
         .catch(err => { throw new HttpError(500, err.message, person.id) });
 
     res.send(result);
@@ -165,6 +171,6 @@ const getTotalStats = async (req, res) => {
 
 module.exports = {
     status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep,
-    deleteImmigrant, initImmigrant,
+    deleteImmigrant, initImmigrant,getExcel,
     getDomains, getCompletedStats, getGardenerStats, getTotalStats
 }
