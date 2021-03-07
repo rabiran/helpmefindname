@@ -6,8 +6,10 @@ const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant,
 const { getPersonApi, orchRetry, orchPause } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
+const gConfig = require('../../config/index');
 const {getExcelJson} = require('../Excel/excel')
 const { Http } = require('winston/lib/winston/transports');
+const { config } = require('winston');
 // const { createInTargetOrch } = require('../apis');
 const status = async (req, res) => {
     res.send('service on');
@@ -153,6 +155,12 @@ const deleteImmigrant = async (req, res) => {
 const getDomains = async (req, res) => {
     res.json(Object.values(domains));
 }
+const getEntityType = async (req, res) => {
+    res.json(gConfig.entityType);
+}
+const getDomainsMap = async (req, res) => {
+    res.json(gConfig.domainsMap);
+}
 
 const getCompletedStats = async (req, res) => {
     const stats = await dbCompletedStats();
@@ -171,6 +179,6 @@ const getTotalStats = async (req, res) => {
 
 module.exports = {
     status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep,
-    deleteImmigrant, initImmigrant,getExcel,
+    deleteImmigrant, initImmigrant,getExcel,getEntityType,getDomainsMap,
     getDomains, getCompletedStats, getGardenerStats, getTotalStats
 }
