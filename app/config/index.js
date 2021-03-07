@@ -24,7 +24,7 @@ module.exports = {
     specialDomain: 'dataSource1',
     specialMailServer: 'hahaha.com',
     targetDomain: 'damoi.com',
-    isAuth: false,
+    isAuth: true,
     isMock: false,
     excelPath: path.join(__dirname, './dataSourcesMap.xlsx'),
     akaKapaim:[
@@ -33,15 +33,15 @@ module.exports = {
     akaAdkatz:[
         
     ],
-    entityType: "g",
+    entityType: "tamar",
     domainsMap: [
-        ['1.com', '1.com'],
-        ['1.com', '1.lol.com'],
-        ['2.com', '2.com'],
-        ['2.com', '2.haha.com'],
-        ['2.com', '2.lol.com'],
-        ['1.com', '1.ma.com'],
+        ['rabiran.com', 'rabiranuid'],
+        ['somedomain.com', 'somedomainuid'],
+        ['jello.com', 'jellouid'],
+        ['jello2.com', 'jellouid'],
+        ['yoda.sw', ''],
+        ['turtle.com', ''],
         ['donatelo.turtle.com', ''],
-        ['2.com', '2.co.il'],
+        ['rafael.turtle.com', ''],
     ]
 }

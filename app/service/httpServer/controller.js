@@ -153,7 +153,7 @@ const deleteImmigrant = async (req, res) => {
 }
 
 const getDomains = async (req, res) => {
-    res.json(Object.values(domains));
+    res.json(domains);
 }
 const getEntityType = async (req, res) => {
     res.json(gConfig.entityType);

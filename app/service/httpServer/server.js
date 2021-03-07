@@ -4,8 +4,15 @@ const { handleHttpError } = require ('../../helpers/errorHandlers/httpError');
 const { log } = require('../../helpers/logger');
 const morganLogger = require('morgan');
 const {updateExcel} = require('../Excel/excel')
+const bodyParser = require('body-parser');
 
 const app = express();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 app.use(morganLogger('dev'));
 
