@@ -25,17 +25,17 @@ const isValidInit = (req, res, next) => {
 }
 
 const isValidPut = (req, res, next) => {
-    const { step, subStep, progress } = req.body;
+    // const { step, subStep, progress } = req.body;
 
-    if(!isProperType(step, 'string')) {
-        throw new HttpError(400, 'step field needs to be string or is missing');
-    }
-    else if(!isProperType(subStep, 'string')) {
-        throw new HttpError(400, 'subStep field needs to be string or is missing');
-    }
-    else if(!isProperType(progress, 'string')) {
-        throw new HttpError(400, 'progress field needs to be string or is missing');
-    }
+    // if(!isProperType(step, 'string')) {
+    //     throw new HttpError(400, 'step field needs to be string or is missing');
+    // }
+    // else if(!isProperType(subStep, 'string')) {
+    //     throw new HttpError(400, 'subStep field needs to be string or is missing');
+    // }
+    // else if(!isProperType(progress, 'string')) {
+    //     throw new HttpError(400, 'progress field needs to be string or is missing');
+    // }
     next();
 }
 

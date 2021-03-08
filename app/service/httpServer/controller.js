@@ -62,14 +62,14 @@ const initImmigrant = async (req, res) => {
     const tommy = (subStep) => { return { name: subStep, progress } }
     const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
 
-    const data = { 'status': { progress: 'inprogress', steps: stepsObj }, };
+    const data = { 'status': { progress: 'inprogress', steps: stepsObj },  'viewed': false};
     
     const result = await dbUpdateImmigrant(id, data);
     return res.send(result);
 }
 
 const updateImmigrant = async (req, res) => {
-    const { step, subStep, progress, pause, unpauseable } = req.body;
+    const { step, subStep, progress, pause, unpauseable, viewed } = req.body;
     const { id } = req.params;
 
     if (!id) throw new HttpError(400, 'no id');
@@ -85,7 +85,12 @@ const updateImmigrant = async (req, res) => {
     console.log(subStep);
     console.log(progress);
 
-    if (pause) {
+    if(viewed) {
+        const data = { 'viewed': true };
+        const result = await dbUpdateImmigrant(id, data);
+        return res.send(result);
+    }
+    else if (pause) {
         if (migration.unpauseable) {
             throw new HttpError(400, 'unpauseable!', id);
         }
@@ -108,7 +113,7 @@ const updateImmigrant = async (req, res) => {
         const newSteps = JSON.parse(JSON.stringify(steps)); // deep copy
         newSteps[stepIndex].subSteps[subStepIndex].progress = progress;
 
-        const data = { 'status.steps': newSteps  };
+        const data = { 'status.steps': newSteps , viewed: false };
         let result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }

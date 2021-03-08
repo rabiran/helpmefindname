@@ -74,6 +74,8 @@ module.exports = async (
       fullName: normalizedPerson.fullName,
       identifier: normalizedPerson.identifier || "12345",
       startDate: startDate || new Date(),
+      phone: normalizedPerson.phone[0] || '',
+      mobilePhone: normalizedPerson.mobilePhone[0] || ''
     };
     const result = await dbAddImmigrant(data);
     return result;

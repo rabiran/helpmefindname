@@ -51,6 +51,14 @@ const schema = new mongoose.Schema({
         required: true,
         default: new Date(),
     },
+    phone: {
+        type: String,
+        required: false
+    },
+    mobilePhone: {
+        type: String,
+        required: false
+    },
     status: {
         progress: {
             type: String,
