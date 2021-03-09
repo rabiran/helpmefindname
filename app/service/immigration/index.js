@@ -74,7 +74,7 @@ module.exports = async (
     const data = {
       _id: normalizedPerson.id,
       // personId: normalizedPerson.id,
-      status: { progress: "inprogress" },
+      status: { progress: "waiting" },
       primaryUniqueId: primaryUniqueId,
       hierarchy: normalizedPerson.hierarchy.join("/"),
       gardenerId,
