@@ -1,3 +1,4 @@
+const start = require('service/immigrantsDb/start');
 const config = require('../../config');
 // const personNormalizer = require('./personNormalizer');
 const OUbuilder = require('../OUbuilder');
@@ -12,37 +13,48 @@ module.exports = (normalizedPerson, primaryUniqueId, isNewUser, startDate, isUrg
     // const specialDomainUser = normalizedPerson.domainUsers.find(user => user.dataSource === config.specialDomain);
     const primaryDomainUserNormalized = normalizedPerson.domainUsers.find(user => user.uniqueID === primaryUniqueId);
 
+    return {
+        First_Name_Heb: normalizedPerson.firstName,
+        Last_Name_Heb: normalizedPerson.lastName,
+        DisplayName: normalizedPerson.fullName,
+        Original_domain: primaryDomainUserNormalized.dataSource,
+        User_Type: normalizedPerson.entityType,
+        Hierarchy: normalizedPerson.hierarchy.join('/'),
+        User_Profile: normalizedPerson.job,
+        Aman_ID: primaryDomainUserNormalized.adfsUID,
+        Mail: normalizedPerson.mail,
+        Private_Number: normalizedPerson.personalNumber,
+        ID_Number: normalizedPerson.identityCard,
+        Phone_Number: normalizedPerson.mobilePhone[0],
+        Rank: normalizedPerson.rank,
+        NewUser: isNewUser,
+        IsUrgent: isUrgent,
+        DestinationDate: startDate
+    }
+
     // return {
+    //     ID: normalizedPerson.id,
     //     First_Name_Heb: normalizedPerson.firstName,
-    //     isNewUser,
     //     Last_Name_Heb: normalizedPerson.lastName,
     //     DisplayName: normalizedPerson.fullName,
     //     Original_domain: primaryDomainUserNormalized.dataSource,
+    //     // userMivzar: 
     //     User_Type: normalizedPerson.entityType,
     //     Hierarchy: normalizedPerson.hierarchy.join('/'),
-    //     User_Profile: normalizedPerson.job,
-    //     Aman_ID: primaryDomainUserNormalized.adfsUID,
+    //     AMAN_ID: primaryDomainUserNormalized.adfsUID,
     //     Mail: normalizedPerson.mail,
-    //     Private_Number: normalizedPerson.personalNumber,
-    //     ID_Number: normalizedPerson.identityCard,
-    //     Phone_Number: normalizedPerson.mobilePhone[0],
-    //     Rank: normalizedPerson.rank,
-    // }
 
-    return {
-        ID: normalizedPerson.id,
-        GivenName: normalizedPerson.firstName,
-        DisplayName: normalizedPerson.fullName,
-        sn: normalizedPerson.lastName,
-        ExtentionAttribute1: primaryDomainUserNormalized.adfsUID,
-        ExtentionAttribute2: `${primaryDomainUserNormalized.userName}@${primaryDomainUserNormalized.domainName}`,
-        Mail: normalizedPerson.mail,
-        SamAccountName: primaryDomainUserNormalized.userName,
-        IsNewUser: isNewUser,
-        StartDate: startDate,
-        IsUrgent: isUrgent
-        // StartDate: startDate,
-    }
+
+    //     sn: normalizedPerson.lastName,
+    //     ExtentionAttribute1: primaryDomainUserNormalized.adfsUID,
+    //     ExtentionAttribute2: `${primaryDomainUserNormalized.userName}@${primaryDomainUserNormalized.domainName}`,
+    //     Mail: normalizedPerson.mail,
+    //     SamAccountName: primaryDomainUserNormalized.userName,
+    //     IsNewUser: isNewUser,
+    //     StartDate: startDate,
+    //     IsUrgent: isUrgent
+    //     // StartDate: startDate,
+    // }
 
     // return {
     //     ['8cb4d49b-fdb8-46ad-b3d5-4b50099a565e']: normalizedPerson.firstName,
