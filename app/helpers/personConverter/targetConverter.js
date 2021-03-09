@@ -7,7 +7,7 @@ const OUbuilder = require('../OUbuilder');
  * @param primaryUniqueId used for extensionattr1 and 2, example: T8249024@haha.com
  * returns object with fields for active directory
  */
-module.exports = (normalizedPerson, primaryUniqueId, isNewUser, startDate) => {
+module.exports = (normalizedPerson, primaryUniqueId, isNewUser, startDate, isUrgent) => {
     // const normalizedPerson = personNormalizer(person);
     // const specialDomainUser = normalizedPerson.domainUsers.find(user => user.dataSource === config.specialDomain);
     const primaryDomainUserNormalized = normalizedPerson.domainUsers.find(user => user.uniqueID === primaryUniqueId);
@@ -39,6 +39,8 @@ module.exports = (normalizedPerson, primaryUniqueId, isNewUser, startDate) => {
         Mail: normalizedPerson.mail,
         SamAccountName: primaryDomainUserNormalized.userName,
         IsNewUser: isNewUser,
+        StartDate: startDate,
+        IsUrgent: isUrgent
         // StartDate: startDate,
     }
 

@@ -8,6 +8,7 @@ const xmlGenerator = require('../helpers/orchFormater');
 const orchParamParser = require('../helpers/orchParamParser');
 const { retry } = require('../helpers/utils/retry');
 const ntlm = require('httpntlm');
+const { isMock } = require('../config');
 
 const antlmPost = util.promisify(ntlm.post);
 const antlmGet = util.promisify(ntlm.get);
@@ -117,49 +118,6 @@ const createInTargetOrch = async (data) => {
     console.log("NO ERROR SENDING TO ORCH");
     return response.body;
 
-    return {
-        "id": "1",
-        "steps": [
-            {
-                "name": "making pizza",
-                "subSteps": [
-                    {
-                        "name": "preparing"
-                    },
-                    {
-                        "name": "baking"
-                    }
-                ]
-            },
-            {
-                "name": "delivering pizza",
-                "subSteps": [
-                    {
-                        "name": "finding adress"
-                    },
-                    {
-                        "name": "delivering"
-                    },
-                    {
-                        "name": "accepting payment"
-                    }
-                ]
-            }
-        ]
-    }
-
-    return
-    [
-        {
-            "name": "making pizza",
-            "subSteps": ["preparing", "baking"]
-        },
-        {
-            "name": "delivering pizza",
-            "subSteps": ["finding adress", "delivering", "accepting payment"]
-        }
-    ]
-
 
     // const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
 
@@ -174,7 +132,7 @@ const createInTargetOrch = async (data) => {
 
 const orchPause = async (data) => {
     const { id, pause } = data;
-    const runBookId = '123';
+    const runBookId = config.orchPauseId;
     const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
@@ -186,19 +144,47 @@ const orchPause = async (data) => {
     };
     const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
-    const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
+    if(config.isMock) return;
 
-    const res = await retry(orchRequest).catch(err => {
+    const options = {
+        url: `${url}/Jobs/`,
+        username: user,
+        password: pass,
+        workstation: '',
+        domain: domain,
+        body: xml,
+        headers: { 'Content-Type': 'application/atom+xml' }
+    };
+    
+    const response = await antlmPost(options).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
-    });
+    })
 
-    return res;
+    // console.log(xml);
+    console.log("================================");
+    console.log("================================");
+    console.log(response.body);
+    console.log("================================");
+
+    if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if (response.statusCode === 400) throw new Error('Validation failed for orch');
+
+
+    console.log("NO ERROR SENDING TO ORCH");
+    return response.body;
+
+    // const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
+
+    // const res = await retry(orchRequest).catch(err => {
+    //     console.log(err);
+    //     throw new Error('failed sending stuff to orch');
+    // });
 }
 
 const orchRetry = async (data) => {
     const { id, step, subStep } = data;
-    const runBookId = '123';
+    const runBookId = config.orchRetryId;
     const xml = xmlGenerator(data, runBookId);
     console.log(xml);
     // const headers = { Authorization: token };
@@ -210,14 +196,42 @@ const orchRetry = async (data) => {
     };
     const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
 
-    const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
+    if(config.isMock) return;
 
-    const res = await retry(orchRequest).catch(err => {
+    const options = {
+        url: `${url}/Jobs/`,
+        username: user,
+        password: pass,
+        workstation: '',
+        domain: domain,
+        body: xml,
+        headers: { 'Content-Type': 'application/atom+xml' }
+    };
+    
+    const response = await antlmPost(options).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
-    });
+    })
 
-    return res;
+    // console.log(xml);
+    console.log("================================");
+    console.log("================================");
+    console.log(response.body);
+    console.log("================================");
+
+    if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if (response.statusCode === 400) throw new Error('Validation failed for orch');
+
+
+    console.log("NO ERROR SENDING TO ORCH");
+    return response.body;
+
+    // const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
+
+    // const res = await retry(orchRequest).catch(err => {
+    //     console.log(err);
+    //     throw new Error('failed sending stuff to orch');
+    // });
 }
 
 const getPersonApi = async (id) => {

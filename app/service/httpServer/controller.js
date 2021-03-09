@@ -8,9 +8,12 @@ const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
 const gConfig = require('../../config/index');
 const {getExcelJson} = require('../Excel/excel')
-const { Http } = require('winston/lib/winston/transports');
-const { config } = require('winston');
+// const { Http } = require('winston/lib/winston/transports');
+// const { config } = require('winston');
+
 // const { createInTargetOrch } = require('../apis');
+const statusTransform = require('../../helpers/statusTransform');
+
 const status = async (req, res) => {
     res.send('service on');
 }
@@ -31,7 +34,7 @@ const getImmigrants = async (req, res) => {
 }
 
 const addImmigrant = async (req, res) => {
-    const { id, primaryUniqueId, isNewUser, gardenerId , startDate} = req.body;
+    const { id, primaryUniqueId, isNewUser, gardenerId , startDate, isUrgent} = req.body;
     const migration = await dbGetImmigrant(id);
     if (migration) throw new HttpError(400, 'already exists', id);
 
@@ -41,31 +44,46 @@ const addImmigrant = async (req, res) => {
     // const primaryDomainUser = person.domainUsers[primaryUniqueId];
     if (!isDomainFound) throw new HttpError(400, 'this primaryDomainUser(uniqueid) doesnt exist on given person', id);
 
-    const result = await sendToService(person, primaryUniqueId, isNewUser, gardenerId, startDate)
+    const result = await sendToService(person, primaryUniqueId, isNewUser, gardenerId, startDate, isUrgent)
         .catch(err => { throw new HttpError(500, err.message, person.id) });
 
     res.send(result);
 }
 
-const initImmigrant = async (req, res) => {
-    const steps = req.body;
-    const { id } = req.params;
+const overrideImmigrant = async (req, res) => {
+    const orchthing = req.body;
+    // const { id } = req.params;
     
-    console.log("Steps: ");
-    console.log(steps);
+    const succesfulsUpdates = [];
 
-    const tfu = await dbGetImmigrant(id);
+    for(orchObj of orchthing) {
+    // await orchthing.forEach(async (orchObj) => {
+        const { id, steps } = orchObj;
 
-    if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
+        const tfu = await dbGetImmigrant(id);
 
-    const progress = "inprogress";
-    const tommy = (subStep) => { return { name: subStep, progress } }
-    const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy), progress } });
+        // if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
+        if(!tfu) return;
 
-    const data = { 'status': { progress: 'inprogress', steps: stepsObj },  'viewed': false};
+        // const progress = "inprogress";
+        const tommy = (subStep) => { return { name: subStep.name, progress: statusTransform(subStep.status) } }
+        const stepsObj = steps.map(step => { return { name: step.name, subSteps: step.subSteps.map(tommy) } });
+
+        const isFailed = stepsObj.some(step => step.subSteps.some(subStep => subStep.progress === 'failed'))
+        const isCompleted = stepsObj.every(step => step.subSteps.every(subStep => subStep.progress === 'completed'))
+
+        const finalProgress = isFailed ? 'failed' : isCompleted ? 'completed' : 'inprogress';
+
+        const data = { 'status': { progress: finalProgress, steps: stepsObj },  'viewed': false};
+
+        await dbUpdateImmigrant(id, data);
+        succesfulsUpdates.push(id);
+        console.log(succesfulsUpdates);
+    // })
+    }
     
-    const result = await dbUpdateImmigrant(id, data);
-    return res.send(result);
+    console.log(succesfulsUpdates);
+    return res.json(succesfulsUpdates);
 }
 
 const updateImmigrant = async (req, res) => {
@@ -90,12 +108,14 @@ const updateImmigrant = async (req, res) => {
         const result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
-    else if (pause) {
+    else if (pause === true || pause === false) {
         if (migration.unpauseable) {
             throw new HttpError(400, 'unpauseable!', id);
         }
         const response = await orchPause({ id, pause });
-        return res.send(response);
+        const data = { 'status.progress': pause ? 'paused' : 'inprogress' };
+        const result = await dbUpdateImmigrant(id, data);
+        return res.send(result);
     }
     else if (unpauseable) {
         const data = { 'unpauseable': unpauseable };
@@ -113,7 +133,12 @@ const updateImmigrant = async (req, res) => {
         const newSteps = JSON.parse(JSON.stringify(steps)); // deep copy
         newSteps[stepIndex].subSteps[subStepIndex].progress = progress;
 
-        const data = { 'status.steps': newSteps , viewed: false };
+        const isFailed = newSteps.some(step => step.subSteps.some(subStep => subStep.progress === 'failed'))
+        const isCompleted = newSteps.every(step => step.subSteps.every(subStep => subStep.progress === 'completed'))
+
+        const finalProgress = isFailed ? 'failed' : isCompleted ? 'completed' : 'inprogress';
+        
+        const data = { 'status.steps': newSteps , viewed: false , 'status.progress': finalProgress};
         let result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
@@ -184,6 +209,6 @@ const getTotalStats = async (req, res) => {
 
 module.exports = {
     status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep,
-    deleteImmigrant, initImmigrant,getExcel,getEntityType,getDomainsMap,
+    deleteImmigrant, overrideImmigrant,getExcel,getEntityType,getDomainsMap,
     getDomains, getCompletedStats, getGardenerStats, getTotalStats
 }

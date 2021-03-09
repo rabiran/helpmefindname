@@ -1,7 +1,8 @@
  
 const mongoose = require('mongoose');
+const config = require('../../config');
 
-const progressEnum = ['completed', 'inprogress', 'failed'];
+const progressEnum = config.statusEnums;
 
 const schema = new mongoose.Schema({
     _id: {
@@ -62,18 +63,19 @@ const schema = new mongoose.Schema({
     status: {
         progress: {
             type: String,
-            required: true
+            required: true,
+            enum: progressEnum,
         },
         steps: [{
             name: {
                 type: String,
                 required: true
             },
-            progress: {
-                type: String,
-                enum: progressEnum,
-                required: true
-            },
+            // progress: {
+            //     type: String,
+            //     enum: progressEnum,
+            //     required: true
+            // },
             subSteps: [{
                 name: {
                     type: String,

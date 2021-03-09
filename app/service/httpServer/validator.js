@@ -1,7 +1,7 @@
 const { HttpError } = require ('../../helpers/errorHandlers/httpError');
 
 const isValidPost = (req, res, next) => {
-    const { id, primaryUniqueId, isNewUser } = req.body;
+    const { id, primaryUniqueId, isNewUser, isUrgent } = req.body;
 
     if(!isProperType(id, 'string')) {
         throw new HttpError(400, 'id field needs to be string or is missing');
@@ -11,6 +11,9 @@ const isValidPost = (req, res, next) => {
     }
     else if(!isProperType(isNewUser, 'boolean')) {
         throw new HttpError(400, 'isNewUser field needs to be boolean or is missing');
+    }
+    else if(!isProperType(isUrgent, 'boolean')) {
+        throw new HttpError(400, 'isUrgent field needs to be boolean or is missing');
     }
     next();
 }

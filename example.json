@@ -1,0 +1,37 @@
+[
+  {
+    "id": "5f730ecbeaa6861b4a213d50",
+    "steps": [
+      {
+        "name": "making pizza",
+        "subSteps": [
+          {
+            "name": "preparing",
+            "status": 0
+          },
+          {
+            "name": "baking",
+            "status": 1
+          }
+        ]
+      },
+      {
+        "name": "delivering pizza",
+        "subSteps": [
+          {
+            "name": "finding adress",
+            "status": 0
+          },
+          {
+            "name": "delivering",
+            "status": 0
+          },
+          {
+            "name": "accepting payment",
+            "status": 1
+          }
+        ]
+      }
+    ]
+  }
+]

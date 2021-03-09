@@ -20,6 +20,8 @@ const {
   handleHttpError,
 } = require("../../helpers/errorHandlers/httpError");
 
+const config = require('../../config');
+
 /**
  * @param person person from kartoffel db or api
  * @param primaryUniqueId example: T832423@haha.com
@@ -34,6 +36,7 @@ module.exports = async (
   isNewUser = false,
   gardenerId,
   startDate,
+  isUrgent,
   shadowUsers = []
 ) => {
   try {
@@ -45,13 +48,17 @@ module.exports = async (
       normalizedPerson,
       primaryUniqueId,
       isNewUser,
-      startDate
+      startDate,
+      isUrgent
     );
 
 
 
     // =================== IMPORTANT UNCOMMENT THIS LATER:
-    // const response = await createInTargetOrch(targetADuser);
+
+    if(!config.isMock) {
+      const response = await createInTargetOrch(targetADuser);
+    }
     // ============================
 
 
