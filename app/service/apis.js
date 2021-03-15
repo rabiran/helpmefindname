@@ -39,15 +39,6 @@ const pass = config.orchPass
 //     return config;
 // });
 
-// ntlm.post(options, async (err, res) => {
-//     if(err) throw new Error('failed sending stuff to orch');
-
-//     console.log(res.body);
-//     // const haha = await client.get(url).catch(err => {
-//     //     console.log(err.response.data);
-//     // });
-//     // console.log(haha);
-// })
 
 const getOrchParams = async (runBookId) => {
     const options = {
@@ -82,13 +73,6 @@ const createInTargetOrch = async (data) => {
 
     console.log(mergedDataWithParams);
     const xml = xmlGenerator(mergedDataWithParams, runBookId);
-    // // const headers = { Authorization: token };
-    // const headers = { auth: { 
-    //     username: config.targetOrchUser, 
-    //     password: config.targetOrchPass 
-    // }};
-    // const url = `${config.targetOrchUrl}/Orchestrator2012/Orchestrator.svc/Jobs`;
-
 
     const options = {
         url: `${url}/Jobs/`,
@@ -117,17 +101,6 @@ const createInTargetOrch = async (data) => {
 
     console.log("NO ERROR SENDING TO ORCH");
     return response.body;
-
-
-    // const orchRequest = async () => await request.get(url, { headers,  withCredentials: true  });
-
-    // const res = await retry(orchRequest).catch(err => {
-    //     console.log(err);
-    //     throw new Error('failed sending stuff to orch');
-    // });
-
-    // return res;
-    // return { success: true };
 }
 
 const orchPause = async (data) => {
@@ -173,13 +146,6 @@ const orchPause = async (data) => {
 
     console.log("NO ERROR SENDING TO ORCH");
     return response.body;
-
-    // const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
-
-    // const res = await retry(orchRequest).catch(err => {
-    //     console.log(err);
-    //     throw new Error('failed sending stuff to orch');
-    // });
 }
 
 const orchRetry = async (data) => {
@@ -225,13 +191,6 @@ const orchRetry = async (data) => {
 
     console.log("NO ERROR SENDING TO ORCH");
     return response.body;
-
-    // const orchRequest = async () => await request.get(url, { headers, withCredentials: true });
-
-    // const res = await retry(orchRequest).catch(err => {
-    //     console.log(err);
-    //     throw new Error('failed sending stuff to orch');
-    // });
 }
 
 const getPersonApi = async (id) => {

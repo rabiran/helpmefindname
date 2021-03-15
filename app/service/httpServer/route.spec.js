@@ -11,8 +11,8 @@ const expect = chai.expect;
 let expressApp;
 
 const newImmigrantBad = {id: 'sad324kmzsd', badField: 'asdad'};
-const newImmigrantBad2 = {id: '5f730e9ceaa6861b4a213cb1', primaryDomainUser: 'unknownDomain'};
-const newImmigrant= {id: '5f730e9ceaa6861b4a213cb1', primaryDomainUser: 'ads_name'};
+const newImmigrantBad2 = {id: '5f730ea2eaa6861b4a213cc8', primaryUniqueId: 'sadasdsad'};
+const newImmigrant= {id: '5f730e9ceaa6861b4a213cb1', primaryUniqueId: 'estella0@rabiran.com', gardenerId: "2"};
 
 const updateImmigrant = { id: '5f730e9ceaa6861b4a213cb1', type: 'message', message: 'packaging the cheese'};
 const updateImmigrantComplete = { id: '5f730e9ceaa6861b4a213cb1', type: 'complete', shadowUser: {

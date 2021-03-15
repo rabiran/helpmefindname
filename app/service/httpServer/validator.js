@@ -1,49 +1,66 @@
 const { HttpError } = require ('../../helpers/errorHandlers/httpError');
+const Joi = require('joi');
 
-const isValidPost = (req, res, next) => {
-    const { id, primaryUniqueId, isNewUser, isUrgent } = req.body;
+const creationSchema = Joi.object({
+    id: Joi.string().required(),
+    gardenerId: Joi.string().optional(),
+    primaryUniqueId: Joi.string().required(),
+    isNewUser: Joi.boolean().default(false),
+    startDate: Joi.date().optional(),
+    isUrgent: Joi.boolean().default(false),
+});
 
-    if(!isProperType(id, 'string')) {
-        throw new HttpError(400, 'id field needs to be string or is missing');
+const globalUpdateSchema = Joi.array().items(Joi.object({
+    id: Joi.string().required(),
+    steps: Joi.array().required().items(Joi.object({
+        name: Joi.string().required(),
+        subSteps: Joi.array().required().items(Joi.object({
+            name: Joi.string().required(),
+            status: Joi.number().required()
+        }))
+    })),
+}));
+
+const updateStepSchema = Joi.object({
+    step: Joi.string().optional(),
+    subStep: Joi.string().optional(),
+    progress: Joi.string().optional(),
+    pause: Joi.string().optional(),
+    unpauseable: Joi.string().optional(),
+    viewed: Joi.string().optional(),
+});
+
+
+const isValidCreation = (req, res, next) => {
+    const { error } = creationSchema.validate(req.body);
+    if(error) {
+        sendError(error);
     }
-    else if(!isProperType(primaryUniqueId, 'string')) {
-        throw new HttpError(400, 'primaryUniqueId field needs to be number or is missing');
-    }
-    else if(!isProperType(isNewUser, 'boolean')) {
-        throw new HttpError(400, 'isNewUser field needs to be boolean or is missing');
-    }
-    else if(!isProperType(isUrgent, 'boolean')) {
-        throw new HttpError(400, 'isUrgent field needs to be boolean or is missing');
-    }
-    next();
+    next(); 
 }
 
-const isValidInit = (req, res, next) => {
-    // const { steps } = req.body;
-
-    if(!isProperType(req.body, 'object')) {
-        throw new HttpError(400, 'steps must be array');
+const isValidGlobalUpdate = (req, res, next) => {
+    const { error } = globalUpdateSchema.validate(req.body);
+    if(error) {
+        sendError(error);
     }
-    next();
+    next(); 
 }
 
-const isValidPut = (req, res, next) => {
-    // const { step, subStep, progress } = req.body;
-
-    // if(!isProperType(step, 'string')) {
-    //     throw new HttpError(400, 'step field needs to be string or is missing');
-    // }
-    // else if(!isProperType(subStep, 'string')) {
-    //     throw new HttpError(400, 'subStep field needs to be string or is missing');
-    // }
-    // else if(!isProperType(progress, 'string')) {
-    //     throw new HttpError(400, 'progress field needs to be string or is missing');
-    // }
-    next();
+const isValidStepUpdate = (req, res, next) => {
+    const { error } = updateStepSchema.validate(req.body);
+    if(error) {
+        sendError(error);
+    }
+    next(); 
 }
 
+const sendError = (err) => {
+    let msg = err.details[0].message;
+    msg = msg.replace(/"/g, '');
+    throw new HttpError(400, msg);
+}
 
+// const isProperType = (value, type) => (value !== undefined && typeof(value) === type)
 
-const isProperType = (value, type) => (value !== undefined && typeof(value) === type)
-
-module.exports = { isValidPost, isValidPut, isValidInit }
+module.exports = { isValidCreation, isValidStepUpdate, isValidGlobalUpdate }

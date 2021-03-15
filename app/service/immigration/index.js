@@ -1,5 +1,4 @@
 // const isSpecialUser = require('../helpers/validators/isSpecialUser');
-const specialDomains = require("../../config/specialDomains");
 const personNormalizer = require("../../helpers/personNormalizer");
 const {
   handleServiceError,
@@ -10,9 +9,7 @@ const {
   dbAddImmigrant,
 } = require("../immigrantsDb/repository");
 const { log } = require("../../helpers/logger");
-const userCreator = require("./userCreator");
 const { triggerKarting } = require("../apis");
-
 const { createInTargetOrch } = require("../apis");
 const targetConverter = require("../../helpers/personConverter/targetConverter");
 const {
@@ -37,7 +34,6 @@ module.exports = async (
   gardenerId,
   startDate,
   isUrgent,
-  shadowUsers = []
 ) => {
   try {
     console.log("service iteration");
@@ -52,8 +48,6 @@ module.exports = async (
       isUrgent
     );
 
-
-
     // =================== IMPORTANT UNCOMMENT THIS LATER:
 
     if(!config.isMock) {
@@ -62,27 +56,18 @@ module.exports = async (
     // ============================
 
 
-
-    // throw new Error("done");
-
-    // const progress = "inprogress";
-    // const tommy = (subStep) => { return {name: subStep.name, progress}}
-    // const steps = response.steps.map(step => { return {name: step.name, subSteps: step.subSteps.map(tommy), progress}  } );
-
-    // console.log("should not get here");
-
     const data = {
-      _id: normalizedPerson.id,
+      // _id: normalizedPerson.id,
       // personId: normalizedPerson.id,
       status: { progress: "waiting" },
       primaryUniqueId: primaryUniqueId,
       hierarchy: normalizedPerson.hierarchy.join("/"),
       gardenerId,
       fullName: normalizedPerson.fullName,
-      identifier: normalizedPerson.identifier || "12345",
+      identifier: normalizedPerson.identityCard || '-',
       startDate: startDate || new Date(),
-      phone: normalizedPerson.phone[0] || '',
-      mobilePhone: normalizedPerson.mobilePhone[0] || ''
+      phone: normalizedPerson.phone.join(',') || '',
+      mobilePhone: normalizedPerson.mobilePhone.join(',') || ''
     };
     const result = await dbAddImmigrant(data);
     return result;

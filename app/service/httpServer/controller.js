@@ -2,11 +2,12 @@ const sendToService = require('../immigration');
 const { dbGetImmigrants, dbGetImmigrantByGardener, dbAddImmigrant,
     dbUpdateImmigrant, dbAddShadowUser, dbGetImmigrant,
     dbDeleteImmigrant, dbGardenerStats, dbCompletedStats, dbTotalMigrationStats,
-    dbGetImmigrantByPersonId } = require('../immigrantsDb/repository');
+    dbGetImmigrantByPersonId , dbProgressStats} = require('../immigrantsDb/repository');
 const { getPersonApi, orchRetry, orchPause } = require('../apis');
 const { HttpError } = require('../../helpers/errorHandlers/httpError');
 const domains = require('../../config/specialDomains');
 const gConfig = require('../../config/index');
+const domainsMap = require('../../config/domainsMap');
 const {getExcelJson} = require('../Excel/excel')
 // const { Http } = require('winston/lib/winston/transports');
 // const { config } = require('winston');
@@ -142,27 +143,6 @@ const updateImmigrant = async (req, res) => {
         let result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
-
-    // if(!id) throw new HttpError(400, 'no id');
-    // if(!type) throw new HttpError(400, 'no type');
-
-    // switch (type) {
-    //     case 'message': {
-    //         const data = {'status.subStep': message};
-    //         result = await dbUpdateImmigrant(id, data);
-    //         break;
-    //     }
-    //     case 'complete': {
-    //         if(!shadowUser) throw new HttpError(400, 'no shadowuser');
-    //         const data = {'status.subStep': null, 'status.step': 'created user'}
-    //         await dbUpdateImmigrant(id, data);
-    //         result = await dbAddShadowUser(id, shadowUser);
-    //         const person = await getPersonApi(id);
-    //         sendToService(person, result.primaryDomainUser, result.shadowUsers.toObject());
-    //         break;
-    //     }
-    // }
-    // res.send(result);
 }
 
 const retryStep = async (req, res) => {
@@ -189,7 +169,7 @@ const getEntityType = async (req, res) => {
     res.json(gConfig.entityType);
 }
 const getDomainsMap = async (req, res) => {
-    res.json(gConfig.domainsMap);
+    res.json(domainsMap);
 }
 
 const getCompletedStats = async (req, res) => {
@@ -207,8 +187,13 @@ const getTotalStats = async (req, res) => {
     res.json(stats);
 }
 
+const getProgressStats= async (req, res) => {
+    const stats = await dbProgressStats();
+    res.json(stats);
+}
+
 module.exports = {
     status, getImmigrants, getImmigrantsByGardener, addImmigrant, updateImmigrant, retryStep,
     deleteImmigrant, overrideImmigrant,getExcel,getEntityType,getDomainsMap,
-    getDomains, getCompletedStats, getGardenerStats, getTotalStats
+    getDomains, getCompletedStats, getGardenerStats, getTotalStats, getProgressStats
 }

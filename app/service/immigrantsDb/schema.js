@@ -1,13 +1,15 @@
  
 const mongoose = require('mongoose');
 const config = require('../../config');
+const shortid = require('shortid');
 
 const progressEnum = config.statusEnums;
 
 const schema = new mongoose.Schema({
     _id: {
         type: String,
-        required: true
+        required: true,
+        default: shortid.generate
     },
     // personId: {
     //     type: String,
@@ -93,17 +95,17 @@ const schema = new mongoose.Schema({
             _id: false
         }],
     },
-    shadowUsers: [{
-        domainDataSource: {
-            type: String,
-            required: true
-        },
-        fields: {
-            type: Object,
-            required: true
-        },
-        required: false
-    }]
+    // shadowUsers: [{
+    //     domainDataSource: {
+    //         type: String,
+    //         required: true
+    //     },
+    //     fields: {
+    //         type: Object,
+    //         required: true
+    //     },
+    //     required: false
+    // }]
 });
 
 // makes the final object on view prettier with just id field and not _id.

@@ -1,4 +1,3 @@
-const { SchemaType } = require('mongoose');
 const schema = require('./schema');
 const { getRedisPersons } = require('../personsRedis');
 
@@ -44,27 +43,6 @@ const dbDeleteImmigrant = async (_id) => {
 }
 
 const dbGardenerStats = async () => {
-    // const res = await schema.aggregate([
-    //     {
-    //         $match: {
-    //             keywords: { $not: {$size: 0} }
-    //         }
-    //     },
-    //     { $unwind: "$keywords" },
-    //     {
-    //         $group: {
-    //             _id: {$toLower: '$keywords'},
-    //             count: { $sum: 1 }
-    //         }
-    //     },
-    //     {
-    //         $match: {
-    //             count: { $gte: 2 }
-    //         }
-    //     },
-    //     { $sort : { count : -1} },
-    //     { $limit : 100 }
-    // ]);
     const res = await schema.distinct('gardenerId');
     const stats = await Promise.all(res.map(async (gardenerId) => {
         const count = await schema.countDocuments({gardenerId});
@@ -97,13 +75,19 @@ const dbCompletedStats = async () => {
         });
         return {name: domain, count}
     }));
-    
-    
-    // const notCompleted = await schema.countDocuments({'status.progress': { '$ne': 'completed' }});
-    // stats.push({name: null, count: notCompleted});
+    return stats;
+}
+
+const dbProgressStats = async () => {
+    const res = await schema.distinct('status.progress');
+    const stats = await Promise.all(res.map(async (progress) => {
+        const count = await schema.countDocuments({'status.progress': progress});
+        return {name: progress, count}
+    }));
+    console.log(stats);
     return stats;
 }
 module.exports = { dbGetImmigrants, dbGetImmigrant, dbAddImmigrant,
 dbUpdateImmigrant, dbAddShadowUser, dbDeleteImmigrant,
  dbGetImmigrantByGardener, dbGardenerStats, dbCompletedStats,
- dbTotalMigrationStats, dbGetImmigrantByPersonId }
+ dbTotalMigrationStats, dbGetImmigrantByPersonId, dbProgressStats }

@@ -1,4 +1,3 @@
-const start = require('service/immigrantsDb/start');
 const config = require('../../config');
 // const personNormalizer = require('./personNormalizer');
 const OUbuilder = require('../OUbuilder');
