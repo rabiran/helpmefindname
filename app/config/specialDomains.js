@@ -5,7 +5,7 @@
 // }
 
 module.exports =  {
-    ads: "rabiranuid",
+    ads: "rabiran.com",
     es: "somedomainuid",
     target: "dataSource1"
 }

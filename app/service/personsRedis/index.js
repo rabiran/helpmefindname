@@ -5,6 +5,7 @@ const config = require('../../config');
 const { getPersonsApi } = require('../apis');
 const { promisify } = require("util");
 const schedule = require('node-schedule');
+const { log } = require('../../helpers/logger');
 
 let client;
 let getAsync 
@@ -17,13 +18,13 @@ const configureRedisPeople = async () => {
     getAsync = promisify(client.get).bind(client);
     // hgetAsync = promisify(client.hgetall).bind(client);
 
-    client.on("connect", () => {
-        console.log("Redis connected");
-    })
+    // client.on("connect", () => {
+    //     console.log("Redis connected");
+    // })
 
-    client.on("error", (err) => {
-        console.error("Redis Error: " + err);
-    })
+    // client.on("error", (err) => {
+    //     console.error("Redis Error: " + err);
+    // })
 
     setRedisPersons();
     schedule.scheduleJob(cronTime, () => {
@@ -35,7 +36,7 @@ const configureRedisPeople = async () => {
 const setRedisPersons = async () => {
     const persons = await getPersonsApi();
     client.set('persons', persons.length);
-    console.log('saved count in redis');
+    log('saved persons count in redis');
 }
 
 // gets the count

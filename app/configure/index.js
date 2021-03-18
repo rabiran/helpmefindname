@@ -11,14 +11,12 @@ const { configureRedisPeople } = require('../service/personsRedis');
 
 module.exports = async () => {
     try {
-        const port = config.httpPort
-
         initLogger();
         await startDb();
         configureSpikeRedis();
         // await initKafka();
         await configureRedisPeople(config.redisUrl);
-        return httpServer(port);
+        return httpServer(config.httpPort);
     }
     catch(err) {
         console.log('service failed at startup');

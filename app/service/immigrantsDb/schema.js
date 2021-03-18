@@ -11,10 +11,10 @@ const schema = new mongoose.Schema({
         required: true,
         default: shortid.generate
     },
-    // personId: {
-    //     type: String,
-    //     required: true
-    // },
+    personId: {
+        type: String,
+        required: true
+    },
     // migrationId:
     // {
     //     type: String,

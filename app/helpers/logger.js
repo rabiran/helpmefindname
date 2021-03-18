@@ -23,7 +23,7 @@ const createMyLogger = type => {
     const dailyRotates = new DailyRotateFile({
         filename: path.resolve(__dirname, `../../logs/${type}/%DATE%-${type}.log`),
         datePattern: 'DD-MM-YYYY',
-        maxSize: '1k'
+        maxSize: '50m'
     });
 
     const logger = createLogger({
@@ -52,19 +52,19 @@ const createMyLogger = type => {
     return logger;
 }
 
-const logError = (err, personId) => {
+const logError = (err, id) => {
     errorLogger.log({
         level: ERROR,
         message: err,
-        personId
+        id
     });
 }
 
-const log = (msg, personId) => {
+const log = (msg, id) => {
     infoLogger.log({
         level: INFO,
         message: msg,
-        personId
+        id
     });
 }
 

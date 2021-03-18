@@ -16,8 +16,7 @@ const antlmGet = util.promisify(ntlm.get);
 const request = axios.create({
     httpsAgent: new https.Agent({
         rejectUnauthorized: false
-    }),
-    timeout: 5000
+    })
 });
 
 request.interceptors.response.use(
@@ -104,7 +103,7 @@ const createInTargetOrch = async (data) => {
 }
 
 const orchPause = async (data) => {
-    const { id, pause } = data;
+    const { id, paused } = data;
     const runBookId = config.orchPauseId;
     const xml = xmlGenerator(data, runBookId);
     console.log(xml);

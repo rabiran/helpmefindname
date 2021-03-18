@@ -1,5 +1,6 @@
 const { HttpError } = require ('../../helpers/errorHandlers/httpError');
 const Joi = require('joi');
+const config = require('../../config');
 
 const creationSchema = Joi.object({
     id: Joi.string().required(),
@@ -24,10 +25,10 @@ const globalUpdateSchema = Joi.array().items(Joi.object({
 const updateStepSchema = Joi.object({
     step: Joi.string().optional(),
     subStep: Joi.string().optional(),
-    progress: Joi.string().optional(),
-    pause: Joi.string().optional(),
-    unpauseable: Joi.string().optional(),
-    viewed: Joi.string().optional(),
+    progress: Joi.string().optional().valid(...config.statusEnums),
+    paused: Joi.boolean().optional(),
+    unpauseable: Joi.boolean().optional(),
+    viewed: Joi.boolean().optional(),
 });
 
 

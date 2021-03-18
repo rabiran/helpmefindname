@@ -1,5 +1,6 @@
 const schema = require('./schema');
 const { getRedisPersons } = require('../personsRedis');
+const { getPersonApi } = require('../apis');
 
 const dbGetImmigrants = async () => {
     const statuses = await schema.find({});
@@ -46,16 +47,16 @@ const dbGardenerStats = async () => {
     const res = await schema.distinct('gardenerId');
     const stats = await Promise.all(res.map(async (gardenerId) => {
         const count = await schema.countDocuments({gardenerId});
-        return {name: gardenerId, count}
+        const gardenerPerson = await getPersonApi(gardenerId);
+        return {name: gardenerPerson.fullName || gardenerId, count}
     }));
-    console.log(stats);
     return stats;
 }
 
 const dbTotalMigrationStats = async () => {
     let stats = await dbCompletedStats();
     const personsCount = await getRedisPersons();
-    const notMigratedCount =  personsCount - completed.length;
+    const notMigratedCount =  personsCount - stats.length;
     stats.push({name: null, count: notMigratedCount});
 
     return stats;

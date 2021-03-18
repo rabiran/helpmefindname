@@ -10,29 +10,112 @@ const expect = chai.expect;
 
 let expressApp;
 
-const newImmigrantBad = {id: 'sad324kmzsd', badField: 'asdad'};
-const newImmigrantBad2 = {id: '5f730ea2eaa6861b4a213cc8', primaryUniqueId: 'sadasdsad'};
-const newImmigrant= {id: '5f730e9ceaa6861b4a213cb1', primaryUniqueId: 'estella0@rabiran.com', gardenerId: "2"};
+const newImmigrantBad = { id: 'sad324kmzsd', badField: 'asdad' };
+const newImmigrantBad2 = { id: '5f730ea2eaa6861b4a213cc8', primaryUniqueId: 'sadasdsad' };
+const newImmigrant = { id: '5f730ea2eaa6861b4a213cc8', primaryUniqueId: 'estella0@rabiran.com', gardenerId: "2" };
 
-const updateImmigrant = { id: '5f730e9ceaa6861b4a213cb1', type: 'message', message: 'packaging the cheese'};
-const updateImmigrantComplete = { id: '5f730e9ceaa6861b4a213cb1', type: 'complete', shadowUser: {
-    domainUser: 'es_name',
-    fields: {
-        hahahah: 'ajjadajd'
+const globalUpdateImmigrantBad = [
+    {
+        "id": "5f730ea2eaa6861b4a213cc8",
+        "steps": [
+            {
+                "name": "making pizza",
+                "subSteps": [
+                    {
+                        "name": "preparing",
+                        "status": "baddddd"
+                    },
+                    {
+                        "name": "baking",
+                        "status": 1
+                    }
+                ]
+            },
+            {
+                "name": "delivering pizza",
+                "subSteps": [
+                    {
+                        "name": "finding adress",
+                        "status": 0
+                    },
+                    {
+                        "name": "delivering",
+                        "status": 0
+                    },
+                    {
+                        "name": "accepting payment",
+                        "status": 1
+                    }
+                ]
+            }
+        ]
     }
-}};
+]
 
-before(async()=> {
-    console.log = function () {};
+const globalUpdateImmigrant = [
+    {
+        "id": "5f730ea2eaa6861b4a213cc8",
+        "steps": [
+            {
+                "name": "making pizza",
+                "subSteps": [
+                    {
+                        "name": "preparing",
+                        "status": 0
+                    },
+                    {
+                        "name": "baking",
+                        "status": 1
+                    }
+                ]
+            },
+            {
+                "name": "delivering pizza",
+                "subSteps": [
+                    {
+                        "name": "finding adress",
+                        "status": 0
+                    },
+                    {
+                        "name": "delivering",
+                        "status": 0
+                    },
+                    {
+                        "name": "accepting payment",
+                        "status": 1
+                    }
+                ]
+            }
+        ]
+    }
+]
+
+
+
+const updateImmigrantStepBad = { step: 'making pizza', subStep: 'packaging the cheese', progress: 'completed' };
+const updateImmigrantStepBad2 = { step: 'making pizza', subStep: 'preparing', progress: 'bad' };
+const updateImmigrantStep = { step: 'making pizza', subStep: 'preparing', progress: 'completed' };
+
+const updateImmigrantBad = { randomshit: 'idk '};
+
+const updateImmigrantPauseWrong = { pause: true };
+const updateImmigrantUnpauseable = { unpauseable: true };
+const updateImmigrantPause = { pause: true };
+const updateImmigrantViewed = { viewed: true };
+// const updateImmigrantUnpause = { pause: false };
+
+
+before(async () => {
+    console.log = function () { };
     expressApp = await server();
     console.log("Waiting 3 seconds..");
     await sleep(3000);
 });
 
 beforeEach((done) => {
-    schema.deleteMany({}, (err) => { 
-       done();           
-    });        
+    schema.deleteMany({}, (err) => {
+        done();
+    });
 });
 
 
@@ -50,7 +133,7 @@ describe('POST /immigrant', () => {
         const res = await chai.request(expressApp).post('/api/immigrant').send(newImmigrantBad);
         res.should.have.status(400);
     });
-    it('should give 400 for user with not his primaryDomain', async () => {
+    it('should give 400 for user with not his primaryUniqueId', async () => {
         const res = await chai.request(expressApp).post('/api/immigrant').send(newImmigrantBad2);
         res.should.have.status(400);
     });
@@ -63,20 +146,92 @@ describe('POST /immigrant', () => {
 });
 
 describe('PUT /immigrant', () => {
-    it('Should update substep message', async () => {
-        await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
-        await sleep(1000); // fake wait for service to run
-        const res = await chai.request(expressApp).put('/api/immigrant').send(updateImmigrant);
+    it('Should give empty array because no correct id was given', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = 'asdlasdl';
+        console.log(globalUpdateImmigrantBad);
+        const res = await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
+        console.log(res.body);
         res.should.have.status(200);
-        // res.body.should.be.a('object');
-        // res.body.should.have.deep.property('status.substep');
+        res.body.length.should.be.eql(0);
     });
-    it('Should update step as user created', async () => {
-        await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
-        await sleep(1000); // fake wait for service to run
-        const res = await chai.request(expressApp).put('/api/immigrant').send(updateImmigrantComplete);
+    it('Should give 400 for incorrect field', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrantBad[0].id = migration.body.id;
+        const res = await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrantBad);
+        res.should.have.status(400);
+    });
+    it('Should create the steps of migration', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = migration.body.id;
+        const res = await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
         res.should.have.status(200);
-        // res.body.should.be.a('object');
-        // res.body.should.have.deep.property('status.step', 'user created');
+        res.body.should.be.a('array');
+        res.body.length.should.be.eql(1);
+    });
+});
+
+describe('PUT /immigrant/:id', () => {
+    it('Should give 400 with not existing substep', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantStepBad);
+        res.should.have.status(400);
+    });
+    it('Should give 400 with incorrect progress', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantStepBad2);
+        res.should.have.status(400);
+    });
+    it('Should give 400 with overall wrong fields', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantBad);
+        res.should.have.status(400);
+    });
+
+    it('Should update step and substep of migration', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = migration.body.id;
+        await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantStep);
+        console.log(res.body);
+        res.should.have.status(200);
+    });
+
+
+
+    it('Should give 400 when trying to pause unpauseable migration', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = migration.body.id;
+        await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
+        await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantUnpauseable);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantPauseWrong);
+        console.log(res.body);
+        res.should.have.status(400);
+    });
+
+    it('Should make migration unpauseable', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = migration.body.id;
+        await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantUnpauseable);
+        res.should.have.status(200);
+        res.body.unpauseable.should.be.eql(true);
+    });
+    it('Should pause migration', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = migration.body.id;
+        await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantPause);
+        res.should.have.status(200);
+        res.body.status.progress.should.be.eql('paused');
+    });
+    it('Should mark migration as viewed', async () => {
+        const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
+        globalUpdateImmigrant[0].id = migration.body.id;
+        await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
+        const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantViewed);
+        res.should.have.status(200);
+        // res.body.status.progress.shoud.equal('paused');
+        res.body.viewed.should.be.eql(true);
     });
 });

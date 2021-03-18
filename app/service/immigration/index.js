@@ -36,8 +36,8 @@ module.exports = async (
   isUrgent,
 ) => {
   try {
-    console.log("service iteration");
     const normalizedPerson = personNormalizer(person);
+    log("service iteration", normalizedPerson.id);
     // const id = normalizedPerson.id;
 
     const targetADuser = targetConverter(
@@ -48,17 +48,18 @@ module.exports = async (
       isUrgent
     );
 
-    // =================== IMPORTANT UNCOMMENT THIS LATER:
 
     if(!config.isMock) {
       const response = await createInTargetOrch(targetADuser);
     }
-    // ============================
 
 
+
+    console.log('cant get here');
+    
     const data = {
       // _id: normalizedPerson.id,
-      // personId: normalizedPerson.id,
+      personId: normalizedPerson.id,
       status: { progress: "waiting" },
       primaryUniqueId: primaryUniqueId,
       hierarchy: normalizedPerson.hierarchy.join("/"),
@@ -81,6 +82,7 @@ module.exports = async (
   } catch (err) {
     // handleServiceError(err, person.id || person._id);
     // handleHttpError({ message: err.message, code: 500, personId: person.id || person._id});
+    // log("service iteration failed", normalizedPerson.id);
     throw new Error(err);
     // throw new HttpError(500, err.message);
   }

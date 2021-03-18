@@ -7,7 +7,7 @@ const xmler = require("xml2json");
  */
 module.exports = (data, runBookId) => {
 
-    const orchJson = {...orchFormat};
+    const orchJson = JSON.parse(JSON.stringify(orchFormat));
     orchJson.entry.content['m:properties']["d:RunbookId"].$t = `{${runBookId}}`;
     let params = orchJson.entry.content['m:properties']["d:Parameters"].Data.Parameter;
     params = [];

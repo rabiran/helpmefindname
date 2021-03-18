@@ -36,8 +36,8 @@ const getImmigrants = async (req, res) => {
 
 const addImmigrant = async (req, res) => {
     const { id, primaryUniqueId, isNewUser, gardenerId , startDate, isUrgent} = req.body;
-    const migration = await dbGetImmigrant(id);
-    if (migration) throw new HttpError(400, 'already exists', id);
+    const migration = await dbGetImmigrantByPersonId(id);
+    if (migration.length > 0) throw new HttpError(400, 'already exists', id);
 
     const person = await getPersonApi(id);
 
@@ -58,13 +58,12 @@ const overrideImmigrant = async (req, res) => {
     const succesfulsUpdates = [];
 
     for(orchObj of orchthing) {
-    // await orchthing.forEach(async (orchObj) => {
         const { id, steps } = orchObj;
 
         const tfu = await dbGetImmigrant(id);
 
         // if(!tfu) throw new HttpError(400, 'this migration doesnt exist');
-        if(!tfu) return;
+        if(!tfu) break;
 
         // const progress = "inprogress";
         const tommy = (subStep) => { return { name: subStep.name, progress: statusTransform(subStep.status) } }
@@ -79,16 +78,13 @@ const overrideImmigrant = async (req, res) => {
 
         await dbUpdateImmigrant(id, data);
         succesfulsUpdates.push(id);
-        console.log(succesfulsUpdates);
-    // })
     }
-    
-    console.log(succesfulsUpdates);
     return res.json(succesfulsUpdates);
 }
 
 const updateImmigrant = async (req, res) => {
-    const { step, subStep, progress, pause, unpauseable, viewed } = req.body;
+    console.log(req.body);
+    const { step, subStep, progress, paused, unpauseable, viewed } = req.body;
     const { id } = req.params;
 
     if (!id) throw new HttpError(400, 'no id');
@@ -99,22 +95,17 @@ const updateImmigrant = async (req, res) => {
 
     const migration = tfu.toObject();
 
-    console.log("update: ");
-    console.log(step);
-    console.log(subStep);
-    console.log(progress);
-
     if(viewed) {
         const data = { 'viewed': true };
         const result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }
-    else if (pause === true || pause === false) {
+    else if (paused === true || paused === false) {
         if (migration.unpauseable) {
             throw new HttpError(400, 'unpauseable!', id);
         }
-        const response = await orchPause({ id, pause });
-        const data = { 'status.progress': pause ? 'paused' : 'inprogress' };
+        const response = await orchPause({ id, paused });
+        const data = { 'status.progress': paused ? 'paused' : 'inprogress' };
         const result = await dbUpdateImmigrant(id, data);
         return res.send(result);
     }

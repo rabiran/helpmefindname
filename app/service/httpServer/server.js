@@ -5,6 +5,7 @@ const { log } = require('../../helpers/logger');
 const morganLogger = require('morgan');
 const {updateExcel} = require('../Excel/excel')
 const bodyParser = require('body-parser');
+const config = require('../../config');
 
 const app = express();
 
@@ -14,7 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(morganLogger('dev'));
+if(config.env !== 'test')
+    app.use(morganLogger('dev'));
 
 app.use(express.json());
 
