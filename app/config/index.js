@@ -27,7 +27,7 @@ module.exports = {
     specialMailServer: 'hahaha.com',
     targetDomain: 'damoi.com',
     isAuth: false,
-    isMock: false,
+    isMock: true,
     excelPath: path.join(__dirname, './dataSourcesMap.xlsx'),
     statusEnums: ['waiting', 'inprogress', 'failed', 'completed', 'paused'],
     akaKapaim:[

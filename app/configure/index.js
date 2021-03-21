@@ -8,8 +8,17 @@ const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
 const { initKafka } = require('../helpers/kafkaProducer');
 const { configureRedisPeople } = require('../service/personsRedis');
+const { exec } = require("child_process");
+const util = require('util');
+
+const execify = util.promisify(exec);
 
 module.exports = async () => {
+    // const { stdout,  stderr} = await execify('lssadasd').catch(err => {
+    //     console.log(err);
+    // });
+    // console.log(stdout);
+
     try {
         initLogger();
         await startDb();
