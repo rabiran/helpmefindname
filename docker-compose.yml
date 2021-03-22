@@ -20,6 +20,7 @@ services:
     mongodb-primary:
         container_name: gmongo-primary
         image: bitnami/mongodb:latest
+        user: root
         #env_file: docker-compose.env
         restart: unless-stopped
         environment:
@@ -36,7 +37,7 @@ services:
         # ports:
         #     - "27017:27017"
         volumes:
-            - ./data:/data/db
+            - ${MONGODB_LOCALVOLUME}:/bitnami/mongodb/data
 
     mongodb-secondary:
         container_name: gmongo-secondary
@@ -76,6 +77,7 @@ services:
     redis:
         container_name: gredis
         image: bitnami/redis:latest
+        user: root
         restart: unless-stopped
         environment: 
             # - ALLOW_EMPTY_PASSWORD=yes
@@ -83,4 +85,4 @@ services:
         ports:
             - "6379:6379"
         volumes:
-            - ./data:/data/redis
+            - ${REDIS_LOCALVOLUME}:/bitnami/redis/data
