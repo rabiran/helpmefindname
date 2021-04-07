@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+    g:
+        container_name: gservice
+        image: suharik/gimage:try
+        # build: .
+        restart: unless-stopped
+        env_file: docker-compose.env
+        ports:
+            - "3000:8000"
+        environment: 
+            - DB_URL= mongodb://guser:password2@mongo:27017/g
+            - REDIS_URL= redis://:password3@redis:6379
+        depends_on:
+            - mongo
+            - redis
+        deploy:
+            mode: global
+            # replicas: 2
+            # placement:
+            #     constraints:
+            #     - node.hostname == node1
+
+    
+    mongo:
+        container_name: gmongo
+        image: bitnami/mongodb:latest
+        restart: unless-stopped
+        environment:
+            # - MONGO_INITDB_ROOT_USERNAME=admin
+            # - MONGO_INITDB_ROOT_PASSWORD=password
+            # - MONGO_INITDB_DATABASE = g
+            - MONGODB_ROOT_PASSWORD=password1
+            - MONGODB_USERNAME=guser
+            - MONGODB_PASSWORD=password2
+            - MONGODB_DATABASE=g
+        ports:
+            - "27017:27017"
+        volumes:
+            - /data:/data/db
+        deploy:
+            mode: global
+            # replicas: 2
+        
+    redis:
+        container_name: gredis
+        image: bitnami/redis:latest
+        restart: unless-stopped
+        environment: 
+            # - ALLOW_EMPTY_PASSWORD=yes
+            - REDIS_PASSWORD=password3
+        ports:
+            - "6379:6379"
+        volumes:
+            - /data:/data/redis
+        deploy:
+            mode: global
+            # replicas: 2
