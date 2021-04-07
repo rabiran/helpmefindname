@@ -1,0 +1,107 @@
+version: '3.3'
+
+services:
+    g:
+        image: suharik/gimage:latest
+        # build: .
+        restart: unless-stopped
+        env_file: swarm.env
+        ports:
+            - "80:8000"
+        # environment: 
+        #     - DB_URL= mongodb://guser:password2@mongo:27017/g
+        #     - REDIS_URL= redis://:password3@redis:6379
+        depends_on:
+            - mongodb-primary
+            - redis
+        deploy:
+            replicas: 2
+            placement:
+                constraints:
+                    - node.labels.backend == 1
+
+    # mongo:
+    #     image: bitnami/mongodb:latest
+    #     restart: unless-stopped
+    #     env_file: swarm.env
+    #     # user: root
+    #     ports:
+    #         - "27017:27017"
+    #     # volumes:
+    #     #     - /volume:/bitnami/mongodb/data
+    #     deploy:
+    #         replicas: 1
+    #         placement:
+    #             constraints:
+    #                 - node.labels.manager == 1
+    
+    mongodb-primary:
+        container_name: gmongo-primary
+        image: bitnami/mongodb:latest
+        #user: root
+        env_file: swarm.env
+        restart: unless-stopped
+        environment:
+            - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+            - MONGODB_REPLICA_SET_MODE=primary
+        # ports:
+        #     - "27017:27017"
+        # volumes:
+        #     - ${MONGODB_LOCALVOLUME}:/bitnami/mongodb/data
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.labels.manager == 1
+
+    mongodb-secondary:
+        image: bitnami/mongodb:latest
+        env_file: swarm.env
+        restart: unless-stopped
+        depends_on:
+            - mongodb-primary
+        environment:
+            - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
+            - MONGODB_REPLICA_SET_MODE=secondary
+        # ports:
+        #     - "27017:27017"
+        # volumes:
+        #     - ./data:/data/db
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.labels.worker == 1
+    
+    mongodb-arbiter:
+        image: bitnami/mongodb:latest
+        env_file: swarm.env
+        restart: unless-stopped
+        depends_on:
+            - mongodb-primary
+        environment:
+            - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
+            - MONGODB_REPLICA_SET_MODE=arbiter
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.labels.worker == 2
+
+    redis:
+        image: bitnami/redis:latest
+        restart: unless-stopped
+        env_file: swarm.env
+        user: root
+        # environment: 
+        #     # - ALLOW_EMPTY_PASSWORD=yes
+        #     - REDIS_PASSWORD=password3
+        ports:
+            - "6379:6379"
+        # volumes:
+        #     - /volume:/bitnami/redis/data
+        deploy:
+            replicas: 2
+            placement:
+                constraints:
+                    - node.labels.backend == 1
