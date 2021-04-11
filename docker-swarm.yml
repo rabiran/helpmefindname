@@ -135,10 +135,10 @@ services:
         volumes:
             - /volume/redis:/bitnami/redis/data
         deploy:
-            replicas: 2
+            replicas: 1
             placement:
                 constraints:
-                    - node.labels.backend == 1
+                    - node.labels.manager == 1
 
 configs:
     dataSources:

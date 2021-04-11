@@ -17,6 +17,7 @@ const {
   handleHttpError,
 } = require("../../helpers/errorHandlers/httpError");
 
+const shortid = require('shortid');
 const config = require('../../config');
 
 /**
@@ -38,9 +39,11 @@ module.exports = async (
   try {
     const normalizedPerson = personNormalizer(person);
     log("service iteration", normalizedPerson.id);
-    // const id = normalizedPerson.id;
+
+    const migrId = shortid.generate();
 
     const targetADuser = targetConverter(
+      migrId,
       normalizedPerson,
       primaryUniqueId,
       isNewUser,
@@ -59,6 +62,7 @@ module.exports = async (
     
     const data = {
       // _id: normalizedPerson.id,
+      _id: migrId,
       personId: normalizedPerson.id,
       status: { progress: "waiting" },
       primaryUniqueId: primaryUniqueId,
