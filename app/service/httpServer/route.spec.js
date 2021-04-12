@@ -98,9 +98,9 @@ const updateImmigrantStep = { step: 'making pizza', subStep: 'preparing', progre
 
 const updateImmigrantBad = { randomshit: 'idk '};
 
-const updateImmigrantPauseWrong = { pause: true };
+const updateImmigrantPauseWrong = { paused: true };
 const updateImmigrantUnpauseable = { unpauseable: true };
-const updateImmigrantPause = { pause: true };
+const updateImmigrantPause = { paused: true };
 const updateImmigrantViewed = { viewed: true };
 // const updateImmigrantUnpause = { pause: false };
 
@@ -222,10 +222,11 @@ describe('PUT /immigrant/:id', () => {
         globalUpdateImmigrant[0].id = migration.body.id;
         await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);
         const res = await chai.request(expressApp).put(`/api/immigrant/${migration.body.id}`).send(updateImmigrantPause);
+        console.log(res);
         res.should.have.status(200);
         res.body.status.progress.should.be.eql('paused');
     });
-    it('Should mark migration as viewed', async () => {
+    it('Should mark mi;gration as viewed', async () => {
         const migration = await chai.request(expressApp).post('/api/immigrant').send(newImmigrant);
         globalUpdateImmigrant[0].id = migration.body.id;
         await chai.request(expressApp).put('/api/immigrant').send(globalUpdateImmigrant);

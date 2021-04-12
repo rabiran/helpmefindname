@@ -3,4 +3,5 @@
 /logs
 /data
 docker-compose.env
-swarmenv
+swarm.env
+swarmGarden.env
