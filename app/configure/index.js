@@ -18,8 +18,7 @@ module.exports = async () => {
     //     console.log(err);
     // });
     // console.log(stdout);
-
-    console.log(config);
+    
     try {
         initLogger();
         await startDb();
