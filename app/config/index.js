@@ -1,4 +1,6 @@
 const path = require("path");
+const booleanEnvParser = require('../helpers/utils/booleanEnvParser');
+
 module.exports = {
     env: process.env.NODE_ENV,
     dbOptions: { useUnifiedTopology: true , useNewUrlParser: true },
@@ -26,8 +28,8 @@ module.exports = {
     specialDomain: 'dataSource1',
     specialMailServer: 'hahaha.com',
     targetDomain: 'damoi.com',
-    isAuth: false,
-    isMock: true,
+    isAuth: booleanEnvParser(process.env.IS_AUTH),
+    isMock: booleanEnvParser(process.env.IS_MOCK),
     excelPath: path.join(__dirname, './dataSourcesMap.xlsx'),
     statusEnums: ['waiting', 'inprogress', 'failed', 'completed', 'paused'],
     akaKapaim:[
