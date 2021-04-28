@@ -11,6 +11,7 @@ module.exports = {
     spikeAudience: process.env.AUDIENCE_G,
     kartoffelUrl: process.env.KARTOFFEL_URL,
     kartingUrl: process.env.KARTING_URL,
+    orchConnectorUrl: process.env.ORCH_CONNECTOR_URL,
 
     orchUrl: process.env.ORCH_URL,
     orchUser: process.env.ORCH_USER,

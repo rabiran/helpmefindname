@@ -39,6 +39,13 @@ const pass = config.orchPass
 // });
 
 
+const orchConnectorHealthCheck = async () => {
+    const healthCheck = await axios.get(config.orchConnectorUrl).catch(err =>{
+         throw new Error('failed contacting orch connector') 
+    });
+    console.log(healthCheck.data);
+}
+
 const getOrchParams = async (runBookId) => {
     const options = {
         url: `${url}/Runbooks(guid'${runBookId}')/Parameters`,
@@ -49,16 +56,29 @@ const getOrchParams = async (runBookId) => {
         headers: { 'Content-Type': 'application/atom+xml' }
     };
 
-    const response = await antlmGet(options).catch(err => {
-        console.log(err);
-        throw new Error('failed getting orch params');
+
+    await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: 'nothing'}).catch(err => {
+        // console.log(err);
+        throw new Error('orch connector error');
     });
+
     if (response.statusCode === 401) throw new Error('Unauthorized for orch');
     if (response.statusCode === 400) throw new Error('Validation failed for orch');
 
-    const xmlParams = response.body;
+    const xmlParams = response.data;
     const params = orchParamParser(xmlParams);
     return params;
+
+    // const response = await antlmGet(options).catch(err => {
+    //     console.log(err);
+    //     throw new Error('failed getting orch params');
+    // });
+    // if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    // if (response.statusCode === 400) throw new Error('Validation failed for orch');
+
+    // const xmlParams = response.body;
+    // const params = orchParamParser(xmlParams);
+    // return params;
 }
 
 const createInTargetOrch = async (data) => {
@@ -83,6 +103,18 @@ const createInTargetOrch = async (data) => {
         headers: { 'Content-Type': 'application/atom+xml' }
     };
     
+    await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: xml}).catch(err => {
+        console.log(err);
+        throw new Error('orch connector error');
+    });
+
+    if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    if (response.statusCode === 400) throw new Error('Validation failed for orch');
+
+    console.log("NO ERROR SENDING TO ORCH");
+
+    return response.data;
+
     const response = await antlmPost(options).catch(err => {
         console.log(err);
         throw new Error('failed sending stuff to orch');
@@ -219,4 +251,4 @@ const triggerKarting = async (id) => {
     return true;
 }
 
-module.exports = { createInTargetOrch, orchPause, orchRetry, getPersonApi, triggerKarting, getPersonsApi }
+module.exports = { orchConnectorHealthCheck, createInTargetOrch, orchPause, orchRetry, getPersonApi, triggerKarting, getPersonsApi }

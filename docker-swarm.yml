@@ -21,6 +21,17 @@ services:
         depends_on:
             - mongodb-primary
             - redis
+            - orch-connector
+        deploy:
+            replicas: 2
+            placement:
+                constraints:
+                    - node.labels.backend == 1
+
+    orch-connector:
+        image: suharik/gimage:orch
+        env_file: orchConnector.env
+        restart: unless-stopped
         deploy:
             replicas: 2
             placement:
@@ -68,7 +79,7 @@ services:
     #                 - node.labels.manager == 1
     
     mongodb-primary:
-        image: bitnami/mongodb:latest
+        image: docker.io/bitnami/mongodb:4.4
         #user: root
         env_file: swarm.env
         restart: unless-stopped
@@ -87,13 +98,14 @@ services:
                     - node.labels.manager == 1
 
     mongodb-secondary:
-        image: bitnami/mongodb:latest
+        image: docker.io/bitnami/mongodb:4.4
         env_file: swarm.env
         restart: unless-stopped
         depends_on:
             - mongodb-primary
         environment:
             - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
+            - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
             - MONGODB_REPLICA_SET_MODE=secondary
             - MONGODB_ROOT_PASSWORD=
         # ports:
@@ -107,13 +119,14 @@ services:
                     - node.labels.worker == 1
     
     mongodb-arbiter:
-        image: bitnami/mongodb:latest
+        image: docker.io/bitnami/mongodb:4.4
         env_file: swarm.env
         restart: unless-stopped
         depends_on:
             - mongodb-primary
         environment:
             - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
+            - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
             - MONGODB_REPLICA_SET_MODE=arbiter
             - MONGODB_ROOT_PASSWORD=
         deploy:

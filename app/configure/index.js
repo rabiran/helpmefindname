@@ -8,6 +8,7 @@ const startDb = require('../service/immigrantsDb/start');
 const { configureSpikeRedis } = require('./spike');
 const { initKafka } = require('../helpers/kafkaProducer');
 const { configureRedisPeople } = require('../service/personsRedis');
+const { orchConnectorHealthCheck, createInTargetOrch } = require('../service/apis');
 const { exec } = require("child_process");
 const util = require('util');
 
@@ -25,6 +26,8 @@ module.exports = async () => {
         configureSpikeRedis();
         // await initKafka();
         await configureRedisPeople(config.redisUrl);
+        await orchConnectorHealthCheck();
+        // await createInTargetOrch({haha: 2, haha2: 3, jasdasd: true})
         return httpServer(config.httpPort);
     }
     catch(err) {

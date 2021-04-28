@@ -2,8 +2,7 @@ version: '3'
 
 services:
     g:
-        container_name: gservice
-        # image: suharik/gimage:try
+        image: suharik/gimage:latest
         build: .
         #env_file: docker-compose.env
         restart: unless-stopped
@@ -12,15 +11,29 @@ services:
         environment: 
             - DB_URL= ${DOCKER_DB_URL}
             - REDIS_URL= ${DOCKER_REDIS_URL}
+            - ORCH_CONNECTOR_URL=${DOCKER_ORCH_CONNECTOR_URL}
+            - IS_MOCK=false
             #- REDIS_URL= redis://localhost
         depends_on:
             - mongodb-primary
             - redis
+            - orch-connector
+
+    orch-connector:
+        image: gimage:orch
+        # build: .
+        #env_file: docker-compose.env
+        restart: unless-stopped
+        # ports:
+        #     - "5000:5000"
+        # environment: 
+        #     - DB_URL= ${DOCKER_DB_URL}
+        #     - REDIS_URL= ${DOCKER_REDIS_URL}
+            #- REDIS_URL= redis://localhost
     
     mongodb-primary:
-        container_name: gmongo-primary
-        image: bitnami/mongodb:latest
-        user: root
+        image: docker.io/bitnami/mongodb:4.4
+        # user: root
         #env_file: docker-compose.env
         restart: unless-stopped
         environment:
@@ -36,12 +49,11 @@ services:
             - MONGODB_DATABASE=${MONGODB_DATABASE}
         # ports:
         #     - "27017:27017"
-        volumes:
-            - ${MONGODB_LOCALVOLUME}:/bitnami/mongodb/data
+        # volumes:
+        #     - ${MONGODB_LOCALVOLUME}:/bitnami/mongodb/data
 
     mongodb-secondary:
-        container_name: gmongo-secondary
-        image: bitnami/mongodb:latest
+        image: docker.io/bitnami/mongodb:4.4
         #env_file: docker-compose.env
         restart: unless-stopped
         depends_on:
@@ -61,8 +73,7 @@ services:
         #     - ./data:/data/db
     
     mongodb-arbiter:
-        container_name: gmongo-arbiter
-        image: bitnami/mongodb:latest
+        image: docker.io/bitnami/mongodb:4.4
         #env_file: docker-compose.env
         restart: unless-stopped
         depends_on:
@@ -75,7 +86,6 @@ services:
             - MONGODB_REPLICA_SET_KEY=${MONGODB_REPLICA_SET_KEY}
 
     redis:
-        container_name: gredis
         image: bitnami/redis:latest
         user: root
         restart: unless-stopped
