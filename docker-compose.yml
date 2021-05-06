@@ -3,7 +3,7 @@ version: '3'
 services:
     g:
         image: suharik/gimage:latest
-        build: .
+        # build: .
         #env_file: docker-compose.env
         restart: unless-stopped
         ports:
@@ -20,7 +20,7 @@ services:
             - orch-connector
 
     orch-connector:
-        image: gimage:orch
+        image: suharik/gimage:orch
         # build: .
         #env_file: docker-compose.env
         restart: unless-stopped
