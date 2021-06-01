@@ -57,7 +57,7 @@ const getOrchParams = async (runBookId) => {
     };
 
 
-    await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: 'nothing'}).catch(err => {
+    const response = await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: 'nothing'}).catch(err => {
         // console.log(err);
         throw new Error('orch connector error');
     });
@@ -103,7 +103,7 @@ const createInTargetOrch = async (data) => {
         headers: { 'Content-Type': 'application/atom+xml' }
     };
     
-    await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: xml}).catch(err => {
+    const response = await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: xml}).catch(err => {
         console.log(err);
         throw new Error('orch connector error');
     });
@@ -115,23 +115,23 @@ const createInTargetOrch = async (data) => {
 
     return response.data;
 
-    const response = await antlmPost(options).catch(err => {
-        console.log(err);
-        throw new Error('failed sending stuff to orch');
-    })
+    // const response = await antlmPost(options).catch(err => {
+    //     console.log(err);
+    //     throw new Error('failed sending stuff to orch');
+    // })
 
-    // console.log(xml);
-    console.log("================================");
-    console.log("================================");
-    console.log(response.body);
-    console.log("================================");
+    // // console.log(xml);
+    // console.log("================================");
+    // console.log("================================");
+    // console.log(response.body);
+    // console.log("================================");
 
-    if (response.statusCode === 401) throw new Error('Unauthorized for orch');
-    if (response.statusCode === 400) throw new Error('Validation failed for orch');
+    // if (response.statusCode === 401) throw new Error('Unauthorized for orch');
+    // if (response.statusCode === 400) throw new Error('Validation failed for orch');
 
 
-    console.log("NO ERROR SENDING TO ORCH");
-    return response.body;
+    // console.log("NO ERROR SENDING TO ORCH");
+    // return response.body;
 }
 
 const orchPause = async (data) => {

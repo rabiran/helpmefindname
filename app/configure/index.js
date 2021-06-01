@@ -20,18 +20,20 @@ module.exports = async () => {
     // });
     // console.log(stdout);
     
-    try {
+    // try {
         initLogger();
         await startDb();
+        let a = httpServer(config.httpPort);
         configureSpikeRedis();
         // await initKafka();
         await configureRedisPeople(config.redisUrl);
         await orchConnectorHealthCheck();
+        return a;
         // await createInTargetOrch({haha: 2, haha2: 3, jasdasd: true})
-        return httpServer(config.httpPort);
-    }
-    catch(err) {
-        console.log('service failed at startup');
-        console.log(err);
-    }
+        
+    // }
+    // catch(err) {
+    //     console.log('service failed at startup');
+    //     console.log(err);
+    // }
 }
