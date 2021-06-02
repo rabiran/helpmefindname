@@ -57,7 +57,7 @@ const getOrchParams = async (runBookId) => {
     };
 
 
-    const response = await axios.post(config.orchConnectorUrl, {url: options.url, method: 'POST', data: 'nothing'}).catch(err => {
+    const response = await axios.post(config.orchConnectorUrl, {url: options.url, method: 'GET', data: 'nothing'}).catch(err => {
         // console.log(err);
         throw new Error('orch connector error');
     });

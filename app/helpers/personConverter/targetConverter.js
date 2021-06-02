@@ -2,6 +2,8 @@ const config = require('../../config');
 // const personNormalizer = require('./personNormalizer');
 const OUbuilder = require('../OUbuilder');
 
+const specialDomains = require('../../config/specialDomains');
+
 /**
  * @param normalizedPerson  normalized person
  * @param primaryUniqueId used for extensionattr1 and 2, example: T8249024@haha.com
@@ -12,25 +14,31 @@ module.exports = (migrId, normalizedPerson, primaryUniqueId, isNewUser, startDat
     // const specialDomainUser = normalizedPerson.domainUsers.find(user => user.dataSource === config.specialDomain);
     const primaryDomainUserNormalized = normalizedPerson.domainUsers.find(user => user.uniqueID === primaryUniqueId);
 
+    // normalizedPerson.entityType user type
+    //normalizedPerson.rank,
     return {
         ID: migrId,
         First_Name_Heb: normalizedPerson.firstName,
         Last_Name_Heb: normalizedPerson.lastName,
         DisplayName: normalizedPerson.fullName,
-        Original_domain: primaryDomainUserNormalized.dataSource,
-        User_Type: normalizedPerson.entityType,
+        Original_domain_ID: primaryDomainUserNormalized.dataSource === specialDomains.es ?  '1' : '0',
+        userMivzar: '0', // idk?
+        User_Type: '0',
         Hierarchy: normalizedPerson.hierarchy.join('/'),
-        userMivzar: normalizedPerson.adfsUID, // idk?
-        //User_Profile: normalizedPerson.job,
         Aman_ID: primaryDomainUserNormalized.adfsUID,
         Mail: normalizedPerson.mail,
         Private_Number: normalizedPerson.personalNumber,
         ID_Number: normalizedPerson.identityCard,
-        Phone_Number: normalizedPerson.mobilePhone[0],
-        Rank: normalizedPerson.rank,
+        Rank: '0',
         NewUser: isNewUser,
-        IsUrgent: isUrgent,
-        DestinationDate: startDate
+        DestinationDate: startDatea.toLocaleDateString("en-GB"),
+        SamAccountName_8200: '',
+        //User_Profile: normalizedPerson.job,
+        Phone_Number: normalizedPerson.mobilePhone[0],
+        Commander_Name: '',
+        Commander_Mail: '',
+        operator: ''
+        // IsUrgent: isUrgent,
     }
 
     // return {
