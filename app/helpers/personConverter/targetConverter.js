@@ -16,6 +16,8 @@ module.exports = (migrId, normalizedPerson, primaryUniqueId, isNewUser, startDat
 
     // normalizedPerson.entityType user type
     //normalizedPerson.rank,
+    console.log('====================');
+    console.log(startDate);
     return {
         ID: migrId,
         First_Name_Heb: normalizedPerson.firstName,
@@ -31,7 +33,7 @@ module.exports = (migrId, normalizedPerson, primaryUniqueId, isNewUser, startDat
         ID_Number: normalizedPerson.identityCard,
         Rank: '0',
         NewUser: isNewUser,
-        DestinationDate: startDatea.toLocaleDateString("en-GB"),
+        DestinationDate: new Date(startDate).toLocaleDateString("en-GB"),
         SamAccountName_8200: '',
         //User_Profile: normalizedPerson.job,
         Phone_Number: normalizedPerson.mobilePhone[0],
